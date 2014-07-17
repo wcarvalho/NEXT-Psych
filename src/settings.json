@@ -1,0 +1,9 @@
+{
+	"primary" : "experiments/first/",
+	"image" : "stimuli/image/",
+	"audio" : "stimuli/audio/",
+	"video" : "stimuli/video/",
+	"text" : "stimuli/text/",
+	"html" : "html/",
+	"blocks" : ["dataset.json"]
+}

@@ -1,0 +1,23 @@
+The settings file should contain at least a "primary" key with a value that corresponds to the directory which has the experiment information. Beyong that it may contain a key for every HTML tag type your experiment will contains, and that key type's corresponding directory. For example for a tag of type <summary>, one should have:
+	"summary" : "some/directory/".
+All summary files will then be stored in directory, "primarydirectory/some/directory/"
+
+There are 4 default event types: timed, ...
+Have default struct for each
+
+
+Place your experiment in the experiments folder with the following structure
+
+yourfolder	-> html
+						-> stimuli
+
+Make sure your html folder has a txt file with the 
+
+
+
+if its a file the id is the filename
+
+if not file, you MUST provide an id
+
+
+2 major types: text, media
