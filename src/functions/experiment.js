@@ -104,7 +104,7 @@ function timedEvent()
 function feedbackEvent()
 {
 	load_EvID();
-	if
+
 }
 
 function keydepEvent()
@@ -120,7 +120,6 @@ function keydepEvent()
 			press = event.keyCode;
 			if (keys.indexOf(press) != -1)
 			{
-				alert("hey!");
 				collect.press = press;
 				document.onkeypress = null;
 				block.Data.addObject(collect);
