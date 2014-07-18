@@ -47,7 +47,6 @@
 			$(document).ready(function(){
 				D = new Data();
 				D.addEvent("Began Script");
-					D.lastCollection();
 
 				var settings = <?php echo json_encode($d); ?>;
 		    settings.get = function(what){
@@ -65,7 +64,6 @@
 					B.LoadInstructions();
 					B.loadElements(files);
 					D.addEvent("Loaded all Data");
-					D.lastCollection();
 			    begin_instructions(htmlfiles, prefix);
 				}).fail(function() {
 					alert( "error loading " + prefix+"dataset.json");

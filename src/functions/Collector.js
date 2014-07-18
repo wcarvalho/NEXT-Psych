@@ -1,6 +1,5 @@
 function Data(){
 	this.set = [];
-	this.collect = {};
 
 	this.begin = new Date();
 	this.startTime = this.begin.getTime();
@@ -15,15 +14,18 @@ function Data(){
 	}
 
 	this.addEvent = function(event){
+		this.collect = {};
 		this.collect.event = event;
 		this.TimeSoFar();
 		this.set.push(this.collect);
+		this.lastCollection();
 	}
 
 	this.addObject = function(object){
 		this.collect = object;
 		this.TimeSoFar();
 		this.set.push(this.collect);
+		this.lastCollection();
 	}
 	this.lastCollection = function(){
 		console.log(this.collect);

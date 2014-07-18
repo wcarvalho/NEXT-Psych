@@ -4,7 +4,7 @@ var ev = {};
 var id = "";
 var trials = 0;
 var ids = [];
-
+var events = [];
 
 function begin_block(prefix, block)
 {
@@ -21,12 +21,10 @@ function begin_block(prefix, block)
 
 function loadTrial()
 {
-	++trials;
-	console.log(Trials.length + " trials left");
 	if(Trials.length != 0)
 	{
+		++trials;
 		block.Data.addEvent("Loaded trial " + trials);
-		block.Data.lastCollection();
 		trial = Trials.shift();
 		nextEvent()
 	}
@@ -38,7 +36,6 @@ function nextEvent()
 {
 	if(trial.length != 0)
 	{
-		console.log("loading next event");
 		loadEvent();
 	}
 	else
@@ -48,11 +45,10 @@ function nextEvent()
 }
 
 function loadEvent()
-{
-	var current = trial[0];
-	var type = current.eventType;
-	console.log("\t" + trial.length + " events left");
-	console.log("\tnext type = " + type);
+{	
+	collect = {};
+	load_EvID();
+	var type = ev.eventType;
 	if (type === "Clear")
 		clearEvent();
 	if (type === "Timed")
@@ -68,9 +64,6 @@ function loadEvent()
 
 function clearEvent()
 {
-	console.log("\t\tclearEvent");
-	ev = trial.shift();
-	console.log("ev.which[0] = " + ev.which[0]);
 	if (ev.which[0] === "all"){
 		while(ids.length !== 0){
 			hideindata(ids[0]);
@@ -81,20 +74,16 @@ function clearEvent()
 		for(var j = 0; j < ev.which.length; ++j){
 			hideindata(ev.which[j]);
 		}
-		console.log("else");
 	}
 	nextEvent();
 }
 
 function timedEvent()
 {
-	collect = {};
-	console.log("\t\ttimedEvent");
-	load_EvID()
+	collect.eventType = ev.eventType;
 	collect.id = id;
 	time = ev.duration;
 	showinmain(id);
-	console.log("\t\tsupposed to wait " + time/1000 + " seconds")
 	setTimeout( function(){
 		block.Data.addObject(collect);
 		nextEvent()
@@ -103,25 +92,36 @@ function timedEvent()
 
 function feedbackEvent()
 {
-	load_EvID();
-
+	console.log("Feedback!");
+	console.log("press = " + block.Data.set[block.Data.set.length - 1].press);
+	if ( ev.press.indexOf(block.Data.set[block.Data.set.length - 1].press) === -1 ){
+		var mimic = ev.mimics;
+		console.log("mimic = "+ mimic);
+		if (mimic === "Timed")
+			timedEvent();
+		if (mimic === "Key")
+			keydepEvent();
+		if (mimic === "TimedKey")
+			timedkeyEvent();	
+	}
+	else
+		nextEvent();
+	
 }
 
 function keydepEvent()
 {
-	collect = {};
-	console.log("\t\tkeydepEvent");
-	load_EvID();
 	showinmain(id);
+	collect.eventType = ev.eventType;
 	collect.id = id;
-	var keys = ev.correctkeys;
+	var keys = ev.press;
 	window.onkeypress = function(event)
 		{
-			press = event.keyCode;
+			var press = event.keyCode;
 			if (keys.indexOf(press) != -1)
 			{
 				collect.press = press;
-				document.onkeypress = null;
+				window.onkeypress = null;
 				block.Data.addObject(collect);
 				nextEvent();
 			}
@@ -130,14 +130,11 @@ function keydepEvent()
 
 function timedkeyEvent()
 {
-	collect = {};
-	console.log("\t\ttimedEvent");
-	load_EvID();
+	collect.eventType = ev.eventType;
 	collect.id = id;
 	time = ev.duration;
 	showinmain(id);
-	console.log("\t\tsupposed to wait " + time/1000 + " seconds")
-	var keys = ev.correctkeys;
+	var keys = ev.press;
 	executed = false;
 	presses = 0;
 	window.onkeypress = function(event)
@@ -149,7 +146,6 @@ function timedkeyEvent()
 			if (keys.indexOf(press) != -1)
 			{
 				++presses;
-				alert("key pressed is " + event.charCode);
 			}
 		}
 	}
@@ -168,11 +164,11 @@ function finished()
 function load_EvID()					// load most recent event and id
 {
 	ev = trial.shift();
+	events.push(ev);
 	if (typeof ev.id !== "undefined")
 		id = ev.id;
 	else
 		id = ev.filename;
-	console.log("\t\tchanging id to " + id);
 }
 
 // =====================================================================================
@@ -183,7 +179,6 @@ function showinmain(what)
 	if (ids.indexOf(what) === -1){
 		move_to("main_stage", what);
 	}
-	console.log("show " + what +" in main");
 	show(what);
 	ids.push(what);
 }
