@@ -56,7 +56,7 @@
 		    var htmlfiles = <?php echo json_encode($htmlfiles); ?>;
 		    var files = <?php echo json_encode($files); ?>;
 
-				$.getJSON(prefix+"block1.json", function(data){
+				$.getJSON(prefix+"blocks/block1.json", function(data){
 					block = data;
 					block.Data = D;
 				}).done(function(){
