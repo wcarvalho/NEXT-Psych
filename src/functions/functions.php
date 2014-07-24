@@ -1,7 +1,5 @@
 <?php
 
-$HOME = "../../";
-
 function ListtoArray($filename, &$array)
 {
 	$handle = fopen($filename, "r");
@@ -41,7 +39,7 @@ function load_direc($direc, &$finalarray)
 
 function jsonfile_array($file)
 {
-	$json_obj = file_get_contents($HOME.$file,0,null);
+	$json_obj = file_get_contents($file,0,null);
 	$php_obj = json_decode($json_obj);
 	$obj_array = (array)$php_obj;
 	return $obj_array;

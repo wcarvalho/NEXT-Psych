@@ -5,7 +5,9 @@
 		<script src="src/functions/experiment.js" type="text/javascript"></script>
 		<script src="src/functions/load.js" type="text/javascript"></script>
 		<script src="src/functions/BlockLoader.js" type="text/javascript"></script>
+		<script src="src/functions/BlockRunner.js" type="text/javascript"></script>
 		<script src="src/functions/Collector.js" type="text/javascript"></script>
+		<script src="src/functions/output.js" type="text/javascript"></script>
 
   </head>
 	<body>
@@ -18,7 +20,9 @@
 			$direcfull = $d["primary"];
 
 			$htmlfiles = array();
-			ListtoArray($direcfull . "html/order.txt", $htmlfiles);				// html files loaded
+			$blocks = array();
+			ListtoArray($direcfull . $d["html"] . "order.txt", $htmlfiles);				// html files loaded
+			ListtoArray($direcfull . $d["blocks"] . "order.txt", $blocks);				// blocks loaded
 			
 			$files = array(array()); 
 			load_direc($direcfull.$d["image"], $files);
@@ -48,26 +52,36 @@
 				D = new Data();
 				D.addEvent("Began Script");
 
+				var blocks = [];
 				var settings = <?php echo json_encode($d); ?>;
 		    settings.get = function(what){
 		    	return this.primary + this[what];
 		    }
-				var prefix = <?php echo json_encode($direcfull); ?>;
-		    var htmlfiles = <?php echo json_encode($htmlfiles); ?>;
-		    var files = <?php echo json_encode($files); ?>;
+				var prefix = settings["primary"];
 
-				$.getJSON(prefix+"block1.json", function(data){
-					block = data;
-					block.Data = D;
-				}).done(function(){
-					B = new BlockLoader(block, settings);
-					B.LoadInstructions();
-					B.loadElements(files);
-					D.addEvent("Loaded all Data");
-			    begin_instructions(htmlfiles, prefix);
-				}).fail(function() {
-					alert( "error loading " + prefix+"dataset.json");
-			  });
+		    var files = <?php echo json_encode($files); ?>;
+		    var htmlfiles = <?php echo json_encode($htmlfiles); ?>;
+		    var blockfiles = <?php echo json_encode($blocks); ?>;
+
+		    for (var key in blockfiles){
+		    	blockfiles[key] = settings.get("blocks") + blockfiles[key];
+					$.getJSON(blockfiles[key], function(data){
+						blocks.push(data);
+					}).fail(function() {
+						alert( "error loading " + blockfiles[key]);
+				  }).done(function(){
+						B = new BlockLoader(blocks[blocks.length -1], settings);
+						B.LoadInstructions();
+						B.loadElements(files);
+						if (blocks.length === blockfiles.length){
+							D.addEvent("Loaded All Data");
+					    begin_instructions(htmlfiles, prefix);
+						}
+				  });
+		    }
+	
+
+
 
 				$('#next_btn').click(function(){
 					if (htmlfiles.length !== 0)
@@ -77,7 +91,11 @@
 							$("#main_stage").html("");
 							$('#next_btn').click(function(){
 								$("#next_btn").hide();
-								begin_block(prefix, block);
+								B = new BlockRunner(blocks, D);
+								B.Run();
+								// begin_block(prefix, blocks[0], D);
+
+								// write_output(D, settings.get("output"));
 							});
 						}
 				});

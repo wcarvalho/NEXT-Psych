@@ -12,13 +12,15 @@ function BlockLoader(block, settings){
 			var temp = Object();
 			temp.id = cur_ins;
 			temp.tag = "div";
-			this.Elements.add(temp, "data");
-			var page = this.settings.get("html")+cur_ins;
-			$.get(page, function(content){
-			  document.getElementById(cur_ins).innerHTML = content;
-			}).fail( function(){
-				alert(page + "didn't load!");
-			});
+			if (this.Elements.ids.indexOf(temp.id) === -1){
+				this.Elements.add(temp, "data");
+				var page = this.settings.get("html")+cur_ins;
+				$.get(page, function(content){
+				  document.getElementById(cur_ins).innerHTML = content;
+				}).fail( function(){
+					alert(page + "didn't load!");
+				});
+			}
 		}
 	}
 
@@ -87,8 +89,17 @@ function Elements(){
 	this.latest = -1;
 	this.ids = [];
 
+	this.loadPageids = function(){
+		var temps = document.getElementById("data").children;
+		for(var i = 0; i < temps.length; ++i){
+			this.ids.push(temps[i].id);
+		}
+	}
+
+	this.loadPageids();
+
 	this.setCurrent = function(which){
-		if (which ==! "undefined")
+		if (typeof which !== "undefined")
 			this.current = which;
 		else
 			this.current = this.latest;
@@ -108,7 +119,8 @@ function Elements(){
 		this.setCurrent(which);
 		var current = this.set[this.current];
 		var raw = this.raw[this.current];
-
+		console.log("this.current = " + this.current);
+		console.log("this.set[this.current].id = " + this.set[this.current].id);
 		var X = document.getElementById(current.id);
 		
 		if ((typeof raw.width === 'undefined') || (raw.width === -1))
@@ -117,19 +129,20 @@ function Elements(){
 			}
 		else X.setAttribute("width", raw.width+"px");
 
+		console.log("width = " + raw.width);
 		var s = X.style;
 		s.position = "absolute";	
 		if ((typeof raw.x === 'undefined')||(raw.x === -1))
 		{
 			s.left = "50%";
-			s.marginLeft = -(current.width)/2.0+"px";
+			s.marginLeft = -(raw.width)/2.0+"px";
 		} 
 		else s.left = s.left = raw.x+"px";
 		
 		if ((typeof raw.y === 'undefined')||(raw.y === -1))
 		{
 			s.top = "50%";
-			s.marginTop = -(current.height)/2.0+"px";	} 
+			s.marginTop = -(raw.height)/2.0+"px";	} 
 		else s.top = raw.y+"px";
 	}
 }

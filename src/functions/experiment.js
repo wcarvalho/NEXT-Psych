@@ -5,16 +5,26 @@ var id = "";
 var trials = 0;
 var ids = [];
 var events = [];
+var Data = {};
 
-function begin_block(prefix, block)
+function begin_block(prefix, block, D)
 {
+	Data = D;
+	console.log("BEGIN BLOCK!!");
 	Trials = block.Trials;
 	$.getScript('src/functions/init_instruct.js', function()
 	{
 		main_content(hprefix, block.instructions);
 		window.onkeypress = function(event)
 		{
-			if (event.keyCode === 32) loadTrial();
+			if (event.keyCode === 32){
+				var code = loadTrial();
+			}
+			if (code === "exit")
+			{
+				console.log(code);
+				return;
+			}
 		}
 	});
 }
@@ -24,12 +34,12 @@ function loadTrial()
 	if(Trials.length != 0)
 	{
 		++trials;
-		block.Data.addEvent("Loaded trial " + trials);
+		Data.addEvent("Loaded trial " + trials);
 		trial = Trials.shift();
 		nextEvent()
 	}
 	else
-		finished();
+		return "exit";
 }
 
 function nextEvent()
@@ -82,19 +92,22 @@ function timedEvent()
 {
 	collect.eventType = ev.eventType;
 	collect.id = id;
+	collect.at = "Beginning"
+	Data.addObject(collect)
+	collect.at = "Ending"
 	time = ev.duration;
 	showinmain(id);
 	setTimeout( function(){
-		block.Data.addObject(collect);
+		Data.addObject(collect);
 		nextEvent()
 	}, time);
 }
 
 function feedbackEvent()
 {
-	console.log("Feedback!");
-	console.log("press = " + block.Data.set[block.Data.set.length - 1].press);
-	if ( ev.press.indexOf(block.Data.set[block.Data.set.length - 1].press) === -1 ){
+	var lastPressed = Data.set[Data.set.length - 1].press;
+	var acceptablePresses = ev.press;
+	if ( acceptablePresses.indexOf(lastPressed) === -1 ){
 		var mimic = ev.mimics;
 		console.log("mimic = "+ mimic);
 		if (mimic === "Timed")
@@ -114,6 +127,9 @@ function keydepEvent()
 	showinmain(id);
 	collect.eventType = ev.eventType;
 	collect.id = id;
+	collect.at = "Beginning"
+	Data.addObject(collect)
+	collect.at = "Ending"
 	var keys = ev.press;
 	window.onkeypress = function(event)
 		{
@@ -122,7 +138,7 @@ function keydepEvent()
 			{
 				collect.press = press;
 				window.onkeypress = null;
-				block.Data.addObject(collect);
+				Data.addObject(collect);
 				nextEvent();
 			}
 		}
@@ -132,6 +148,9 @@ function timedkeyEvent()
 {
 	collect.eventType = ev.eventType;
 	collect.id = id;
+	collect.at = "Beginning"
+	Data.addObject(collect)
+	collect.at = "Ending"
 	time = ev.duration;
 	showinmain(id);
 	var keys = ev.press;
@@ -150,15 +169,9 @@ function timedkeyEvent()
 		}
 	}
 	setTimeout( function(){
-			block.Data.addObject(collect);
+			Data.addObject(collect);
 			nextEvent();
 	}, time);
-}
-
-function finished()
-{
-	console.log(block.Data);
-	alert("finished!!");
 }
 
 function load_EvID()					// load most recent event and id
