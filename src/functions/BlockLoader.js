@@ -66,6 +66,8 @@ function BlockLoader(block, settings){
 
 	this.addMediaProp = function(to, from){
 		if (typeof this.fullfiles.length !== 0){
+			console.log("from.filename = " + from.filename);
+			console.log(this.fileIndex);
 			var index = this.fileIndex.indexOf(from.filename);
 			var full = this.fullfiles[index][0] + this.fullfiles[index][1];
 			to.src = full;
@@ -127,7 +129,10 @@ function Elements(){
 			{
 				X.setAttribute("width", "400px");
 			}
-		else X.setAttribute("width", raw.width+"px");
+		else if (raw.width = "preserve"){
+		}
+		else 
+			X.setAttribute("width", raw.width+"px");
 
 		console.log("width = " + raw.width);
 		var s = X.style;
@@ -137,12 +142,14 @@ function Elements(){
 			s.left = "50%";
 			s.marginLeft = -(raw.width)/2.0+"px";
 		} 
-		else s.left = s.left = raw.x+"px";
+		else 
+			s.left = s.left = raw.x+"px";
 		
 		if ((typeof raw.y === 'undefined')||(raw.y === -1))
 		{
 			s.top = "50%";
 			s.marginTop = -(raw.height)/2.0+"px";	} 
-		else s.top = raw.y+"px";
+		else 
+			s.top = raw.y+"px";
 	}
 }
