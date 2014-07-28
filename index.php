@@ -25,7 +25,7 @@
 			load_direc($direcfull.$d["audio"], $files);
 			load_direc($direcfull.$d["video"], $files);
 			load_direc($direcfull.$d["text"], $files);
-			load_direc($direcfull."html/", $files);
+			load_direc($direcfull.$d["html"], $files);
 
 			array_shift($files);
 		?>
@@ -56,9 +56,9 @@
 		    var htmlfiles = <?php echo json_encode($htmlfiles); ?>;
 		    var files = <?php echo json_encode($files); ?>;
 
-				$.getJSON(prefix+"blocks/block1.json", function(data){
+		    var b1 = settings.get("blocks")+"block1.json";
+				$.getJSON(b1, function(data){
 					block = data;
-					block.Data = D;
 				}).done(function(){
 					B = new BlockLoader(block, settings);
 					B.LoadInstructions();
@@ -66,7 +66,7 @@
 					D.addEvent("Loaded all Data");
 			    begin_instructions(htmlfiles, prefix);
 				}).fail(function() {
-					alert( "error loading " + prefix+"dataset.json");
+					alert( "error loading " + b1);
 			  });
 
 				$('#next_btn').click(function(){
@@ -77,7 +77,7 @@
 							$("#main_stage").html("");
 							$('#next_btn').click(function(){
 								$("#next_btn").hide();
-								begin_block(prefix, block);
+								begin_block(prefix, block, D);
 							});
 						}
 				});

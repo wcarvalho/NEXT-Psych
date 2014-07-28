@@ -5,5 +5,5 @@
 	"video" : "stimuli/video/",
 	"text" : "stimuli/text/",
 	"html" : "html/",
-	"blocks" : ["dataset.json"]
+	"blocks" : "blocks/"
 }
