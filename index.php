@@ -6,6 +6,7 @@
 		<script src="src/functions/load.js" type="text/javascript"></script>
 		<script src="src/functions/BlockLoader.js" type="text/javascript"></script>
 		<script src="src/functions/Collector.js" type="text/javascript"></script>
+		<script src="src/functions/blockWriter.js" type="text/javascript"></script>		
 
   </head>
 	<body>
@@ -55,32 +56,36 @@
 				var prefix = <?php echo json_encode($direcfull); ?>;
 		    var htmlfiles = <?php echo json_encode($htmlfiles); ?>;
 		    var files = <?php echo json_encode($files); ?>;
+		    
+		    bw = new blockWriter("Block1", D);
+				bw.asJSON();
 
-		    var b1 = settings.get("blocks")+"block1.json";
-				$.getJSON(b1, function(data){
-					block = data;
-				}).done(function(){
-					B = new BlockLoader(block, settings);
-					B.LoadInstructions();
-					B.loadElements(files);
-					D.addEvent("Loaded all Data");
-			    begin_instructions(htmlfiles, prefix);
-				}).fail(function() {
-					alert( "error loading " + b1);
-			  });
+		 //    var b1 = settings.get("blocks")+"block1.json";
+			// 	$.getJSON(b1, function(data){
+			// 		block = data;
+			// 		block.name = "block1";
+			// 	}).done(function(){
+			// 		B = new BlockLoader(block, settings);
+			// 		B.LoadInstructions();
+			// 		B.loadElements(files);
+			// 		D.addEvent("Loaded all Data");
+			//     begin_instructions(htmlfiles, prefix);
+			// 	}).fail(function() {
+			// 		alert( "error loading " + b1);
+			//   });
 
-				$('#next_btn').click(function(){
-					if (htmlfiles.length !== 0)
-						main_content(settings.get("html"), htmlfiles.shift());
-					if (htmlfiles.length === 0)
-						{ 
-							$("#main_stage").html("");
-							$('#next_btn').click(function(){
-								$("#next_btn").hide();
-								begin_block(prefix, block, D);
-							});
-						}
-				});
+			// 	$('#next_btn').click(function(){
+			// 		if (htmlfiles.length !== 0)
+			// 			main_content(settings.get("html"), htmlfiles.shift());
+			// 		if (htmlfiles.length === 0)
+			// 			{ 
+			// 				$("#main_stage").html("");
+			// 				$('#next_btn').click(function(){
+			// 					$("#next_btn").hide();
+			// 					begin_block(prefix, block, D);
+			// 				});
+			// 			}
+			// 	});
 
 			});
 		</script>

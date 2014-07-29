@@ -195,8 +195,11 @@ function timedorkeyEvent()
 
 function finished()
 {
-	console.log(Data);
-	alert("finished!!");
+	$.getScript('src/functions/blockWriter.js', function()
+	{
+		new blockWriter(Data);
+		blockWriter.asJSON();
+	});
 }
 
 function load_EvID()					// load most recent event and id
