@@ -51,8 +51,43 @@ function spit($var)
 }
 
 function obj_to_file($file, $info){
+
+	file_put_contents($file, "");
 	$handle = fopen($file, 'w');
 	fwrite($handle, $info);
+	fclose($handle);
+}
+
+function arr_to_file($file, $array){
+
+	print( shell_exec ("pwd"));
+	print( "file = " . $file);
+	file_put_contents($file, "");
+	$handle = fopen($file, 'w');
+	// print($handle);
+
+	foreach ($array as $outterkey => $event) {
+		$line = "";
+		foreach ($event as $innerkey => $member) {
+			$addition = $innerkey ." : ";
+			if (is_array($member)){
+				foreach ($member as $i => $val) {
+					$addition .= $val;
+					if ($val != $member[count($member)-1])
+						$addition .= ", ";
+					else
+						$addition .= "; ";
+				}
+				$line .= $addition;
+			}
+			else{
+				$addition .= $member . "; ";
+				$line .= $addition;
+			}
+		}
+		$line .= "\n";
+		fwrite($handle, $line);
+	}
 	fclose($handle);
 }
 

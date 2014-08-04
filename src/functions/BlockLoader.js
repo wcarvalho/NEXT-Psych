@@ -38,7 +38,7 @@ function BlockLoader(block, settings){
 					var temp = Object();
 					temp.tag = current.tag;
 
-					if(current.file)
+					if(typeof current.filename !== "undefined")
 						temp.id = current.filename;
 					else
 						temp.id = current.id;
@@ -106,30 +106,37 @@ function Elements(){
 	}
 	this.place = function(which){
 		this.setCurrent(which);
-		var current = this.set[this.current];
-		var raw = this.raw[this.current];
+		var current = this.set[this.current];	
+		var raw = this.raw[this.current];			//this is the data collected from the block
 
-		var X = document.getElementById(current.id);
-		
-		if ((typeof raw.width === 'undefined') || (raw.width === -1))
-			{
-				X.setAttribute("width", "400px");
-			}
-		else X.setAttribute("width", raw.width+"px");
-
+		var X = document.getElementById(current.id); //this is a DOM element inside data
 		var s = X.style;
 		s.position = "absolute";	
+	
+		if ((typeof raw.width === 'undefined') || (raw.width === -1))
+			{
+				s.width = "400px";
+			}
+		else s.width = raw.width+"px";
+
 		if ((typeof raw.x === 'undefined')||(raw.x === -1))
 		{
 			s.left = "50%";
-			s.marginLeft = -(current.width)/2.0+"px";
+			var xwidth = (X.style.width);
+			xwidth = xwidth.substring(0, xwidth.length - 2);
+			xwidth = parseFloat(xwidth);
+			s.marginLeft = -xwidth/2.0;
 		} 
-		else s.left = s.left = raw.x+"px";
+		else{
+			s.left = raw.x+"px";
+		}
 		
 		if ((typeof raw.y === 'undefined')||(raw.y === -1))
 		{
 			s.top = "50%";
-			s.marginTop = -(current.height)/2.0+"px";	} 
-		else s.top = raw.y+"px";
+			s.marginTop = -(X.height)/2.0+"px";	} 
+		else{
+			s.top = raw.y+"px";
+		}
 	}
 }

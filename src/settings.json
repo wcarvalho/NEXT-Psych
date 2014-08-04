@@ -5,5 +5,6 @@
 	"video" : "stimuli/video/",
 	"text" : "stimuli/text/",
 	"html" : "html/",
-	"blocks" : "blocks/"
+	"blocks" : "blocks/",
+	"results" : "results/"
 }

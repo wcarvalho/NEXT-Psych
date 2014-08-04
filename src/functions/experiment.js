@@ -6,11 +6,13 @@ var trials = 0;
 var ids = [];
 var events = [];
 var Data = {};
+var settings = {}
 
-function begin_block(prefix, block, D)
+function begin_block(S, block, D)
 {
 	Data = D;
 	Trials = block.Trials;
+	settings = S;
 	$.getScript('src/functions/init_instruct.js', function()
 	{
 		main_content(hprefix, block.instructions);
@@ -23,7 +25,7 @@ function begin_block(prefix, block, D)
 
 function loadTrial()
 {
-	if(Trials.length != 0)
+	if(Trials.length !==0)
 	{
 		++trials;
 		Data.addEvent("Loaded trial " + trials);
@@ -36,7 +38,7 @@ function loadTrial()
 
 function nextEvent()
 {
-	if(trial.length != 0)
+	if(trial.length !==0)
 	{
 		loadEvent();
 	}
@@ -50,8 +52,8 @@ function loadEvent()
 {	
 	collect = {};
 	load_EvID();
+	// console.log("y = " + document.getElementById(id).style.marginTop);
 	var type = ev.eventType;
-	console.log("loading event type " + type);
 	if (type === "Clear")
 		clearEvent();
 	if (type === "Timed")
@@ -69,6 +71,7 @@ function loadEvent()
 
 function clearEvent()
 {
+	console.log("clearing!");
 	if (ev.which[0] === "all"){
 		while(ids.length !== 0){
 			hideindata(ids[0]);
@@ -89,6 +92,7 @@ function timedEvent()
 	collect.id = id;
 	time = ev.duration;
 	showinmain(id);
+	print_attrs(id);
 	setTimeout( function(){
 		Data.addObject(collect);
 		nextEvent()
@@ -97,11 +101,8 @@ function timedEvent()
 
 function feedbackEvent()
 {
-	console.log("Feedback!");
-	console.log("press = " + Data.set[Data.set.length - 1].press);
 	if ( ev.press.indexOf(Data.set[Data.set.length - 1].press) === -1 ){
 		var mimic = ev.mimics;
-		console.log("mimic = "+ mimic);
 		if (mimic === "Timed")
 			timedEvent();
 		if (mimic === "Key")
@@ -117,13 +118,16 @@ function feedbackEvent()
 function keydepEvent()
 {
 	showinmain(id);
+
+	print_attrs(id);
+
 	collect.eventType = ev.eventType;
 	collect.id = id;
 	var keys = ev.press;
 	window.onkeypress = function(event)
 		{
 			var press = event.keyCode;
-			if (keys.indexOf(press) != -1)
+			if (keys.indexOf(press) !==-1)
 			{
 				collect.press = press;
 				window.onkeypress = null;
@@ -140,7 +144,6 @@ function timedkeyEvent()
 	time = ev.duration;
 	showinmain(id);
 	var keys = ev.press;
-	executed = false;
 	presses = 0;
 	window.onkeypress = function(event)
 	{
@@ -148,10 +151,11 @@ function timedkeyEvent()
 		{
 			press = event.keyCode;
 			collect.press = press;
-			if (keys.indexOf(press) != -1)
+			if (keys.indexOf(press) !==-1)
 			{
 				Data.addObject(collect);
 				++presses;
+				window.onkeypress = null;
 			}
 		}
 	}
@@ -166,27 +170,33 @@ function timedorkeyEvent()
 	collect.eventType = ev.eventType;
 	collect.id = id;
 	time = ev.duration;
+	console.log("supposed to wait: " + ev.duration);
 	showinmain(id);
 	var keys = ev.press;
 	executed = false;
 	presses = 0;
+	console.log("presses = " + presses);
 	window.onkeypress = function(event)
 	{
 		while (presses < 1)
 		{
 			press = event.keyCode;
 			collect.press = press;
-			if (keys.indexOf(press) != -1)
+			if (keys.indexOf(press) !== -1)
 			{
 				Data.addObject(collect);
 				++presses;
+				window.onkeypress = null;
+				window.clearTimeout(timeout);
+				console.log("exiting from keypress");
 				nextEvent();
 			}
 		}
 	}
-	setTimeout( function(){
+	var timeout = setTimeout( function(){
 		if(presses < 1){
 			Data.addObject(collect);
+			console.log("exiting from timeout");
 			nextEvent();		
 		}
 	}, time);
@@ -197,8 +207,11 @@ function finished()
 {
 	$.getScript('src/functions/blockWriter.js', function()
 	{
-		new blockWriter(Data);
-		blockWriter.asJSON();
+		bw = new blockWriter("Block1", Data, settings);
+		bw.asJSON();
+		bw.asString();
+	}).done(function(){
+		alert("finished!");
 	});
 }
 
@@ -215,6 +228,15 @@ function load_EvID()					// load most recent event and id
 // =====================================================================================
 //							move and display elements
 // =====================================================================================
+function print_attrs(id){
+	console.log(id);
+	var temp = document.getElementById(id);
+	console.log(temp);
+	console.log("x = " + temp.offsetLeft);
+	console.log("y = " + temp.offsetTop);
+
+}
+
 function showinmain(what)
 {
 	if (ids.indexOf(what) === -1){
@@ -249,7 +271,6 @@ function show(what)
 function hide(what)
 {
 	x = document.getElementById(what);
-	console.log("what = " + what);
 	s = x.style;
 	s.display = "none";
 }

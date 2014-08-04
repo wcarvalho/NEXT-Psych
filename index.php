@@ -57,35 +57,38 @@
 		    var htmlfiles = <?php echo json_encode($htmlfiles); ?>;
 		    var files = <?php echo json_encode($files); ?>;
 		    
-		    bw = new blockWriter("Block1", D);
-				bw.asJSON();
+		    var b1 = settings.get("blocks")+"block1.json";
+				$.getJSON(b1, function(data){
+					block = data;
+					block.name = "block1";
+				}).done(function(){
+					B = new BlockLoader(block, settings);
+					B.LoadInstructions();
+					B.loadElements(files);
+					D.addEvent("Loaded all Data");
+			    begin_instructions(htmlfiles, prefix);
+				}).fail(function() {
+					alert( "error loading " + b1);
+			  });
 
-		 //    var b1 = settings.get("blocks")+"block1.json";
-			// 	$.getJSON(b1, function(data){
-			// 		block = data;
-			// 		block.name = "block1";
-			// 	}).done(function(){
-			// 		B = new BlockLoader(block, settings);
-			// 		B.LoadInstructions();
-			// 		B.loadElements(files);
-			// 		D.addEvent("Loaded all Data");
-			//     begin_instructions(htmlfiles, prefix);
-			// 	}).fail(function() {
-			// 		alert( "error loading " + b1);
-			//   });
-
-			// 	$('#next_btn').click(function(){
-			// 		if (htmlfiles.length !== 0)
-			// 			main_content(settings.get("html"), htmlfiles.shift());
-			// 		if (htmlfiles.length === 0)
-			// 			{ 
-			// 				$("#main_stage").html("");
-			// 				$('#next_btn').click(function(){
-			// 					$("#next_btn").hide();
-			// 					begin_block(prefix, block, D);
-			// 				});
-			// 			}
-			// 	});
+				$('#next_btn').click(function(){
+					if (htmlfiles.length !== 0)
+						main_content(settings.get("html"), htmlfiles.shift());
+					if (htmlfiles.length === 0)
+						{ 
+							$("#main_stage").html("");
+							$('#next_btn').click(function(){
+								$("#next_btn").hide();
+								var main = document.getElementById('main_stage');
+								main.setAttribute("style","display:block;width:800px;height:600px");
+								main.style.border = "thick solid #000000"
+								main.style.position = "absolute";
+								main.style.left = "50%";
+								main.style.marginLeft = -(main.offsetWidth)/2.0+"px";
+								begin_block(settings, block, D);
+							});
+						}
+				});
 
 			});
 		</script>
