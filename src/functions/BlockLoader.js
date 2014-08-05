@@ -131,9 +131,9 @@ function Elements(){
 		var s = X.style;
 		s.position = "absolute";	
 	
-		if ((typeof raw.width === 'undefined') || (raw.width === -1))
+		if ((typeof raw.width === 'default') || (raw.width === -1))
 			{
-				s.width = "400px";
+				s.width = "300px";
 			}
 		else s.width = raw.width+"px";
 

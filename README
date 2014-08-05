@@ -33,6 +33,7 @@ Structuring your "settings.json":
   You may add as many directories (each with a corresponding key) as you desire.
 
 
+Note: The dimensions of the experiment window are 800 x 600. Plan your experiment around that.
 Setting up an experimental block as a JSON object:
 This json object has 3 main keys (all of which are required): "instructions," "randomize," and "Trials". 
 
@@ -57,27 +58,23 @@ For each sub-event, the following keys are required:
   - "x":                                    x coordinate relative to left most edge
   - "y":                                    y coordiante relative to top most edge
   - "width":                                desired width of object. default options:
-                                              - 
     ○ Not defined - preserves
     ○ "default" = 300px
     ○ provice Some number
 
 Subevents and key requirements
-  - Clear - clears objects on screen
-    ○ "which" - array with the ids of the objects you would like to remove from screen ([id1, id2, …, idn]) or ["all"]  for all.
-  - Timed - lasts a period of time
-    ○ "duration" - length of time in milliseconds
-  - Key - lasts until key press
-    ○ "press" - which keys are acceptable (in an array) [key1, key2, …, keyn]
-  - TimedKey - lasts period of time listening for a key press
-    ○ "duration" - length of time in milliseconds
-    ○ "press" - which keys are acceptable (in an array) [key1, key2, …, keyn]
-  - TImedOrKey - lasts a period of time or until key press
-    ○ "duration" - length of time in milliseconds
-    ○ "press" - which keys are acceptable (in an array) [key1, key2, …, keyn]
-  - Feedback - dependent on action of user in previous subevent, mimics defined subevent
-    ○ "mimics" - which subevent you want to mimic (e.g. "Timed")
-    ○ The other requirements of the subevent it is mimicing
-
-The dimensions of the experiment window are 800 x 600. Plan your experiment around that
-    
+  - Clear:                                  clears object(s) on screen
+    ○ "which":                                array with the ids of the objects you would like to remove from screen - [id1, id2, …, idn] or ["all"] for all.
+  - Timed:                                  lasts a period of time
+    ○ "duration":                             length of time in milliseconds
+  - Key:                                    lasts until key press
+    ○ "press":                                which keys are acceptable (in an array) [key1, key2, …, keyn]
+  - TimedKey:                               lasts period of time listening for a key press
+    ○ "duration":                             length of time in milliseconds
+    ○ "press":                                which keys are acceptable (in an array) [key1, key2, …, keyn]
+  - TImedOrKey:                             lasts a period of time or until key press
+    ○ "duration":                             length of time in milliseconds
+    ○ "press":                                which keys are acceptable (in an array) [key1, key2, …, keyn]
+  - Feedback:                               dependent on action of user in previous subevent, mimics defined subevent
+    ○ "mimics":                               which subevent you want to mimic (e.g. "Timed")
+    ○ And requirements of the subevent it is mimicing    
