@@ -1,9 +1,6 @@
 {
-	"primary" : "experiments/example/",
-	"image" : "stimuli/image/",
-	"audio" : "stimuli/audio/",
-	"video" : "stimuli/video/",
-	"text" : "stimuli/text/",
+	"primary" : "experiments/stress_study/",
+	"image" : "images/",
 	"html" : "html/",
 	"blocks" : "blocks/",
 	"results" : "results/"
