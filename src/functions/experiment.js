@@ -68,6 +68,7 @@ function loadEvent()
 	if (type === "TimedOrKey")
 		timedorkeyEvent();
 
+
 }
 
 function clearEvent()
@@ -110,6 +111,9 @@ function feedbackEvent()
 			keydepEvent();
 		if (mimic === "TimedKey")
 			timedkeyEvent();	
+		if (type === "TimedOrKey")
+			timedorkeyEvent();
+
 	}
 	else
 		nextEvent();

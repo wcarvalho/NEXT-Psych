@@ -3,11 +3,7 @@
 		[
 			"main.html"
 		],
-	"randomize":
-		{
-			"yes" : false,
-			"which" : []
-		},
+	"randomize": false,
 	"Trials":
 	[
 		[

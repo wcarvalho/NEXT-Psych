@@ -19,7 +19,10 @@
 			$direcfull = $d["primary"];
 
 			$htmlfiles = array();
-			ListtoArray($direcfull . "html/order.txt", $htmlfiles);				// html files loaded
+			ListtoArray($direcfull . $d["html"] ."order.txt", $htmlfiles);				// html files loaded
+
+			$blocks = array();
+			ListtoArray($direcfull . $d["blocks"] . "order.txt", $blocks);				// blocks loaded
 			
 			$files = array(array()); 
 			load_direc($direcfull.$d["image"], $files);
@@ -61,8 +64,10 @@
 				var prefix = <?php echo json_encode($direcfull); ?>;
 		    var htmlfiles = <?php echo json_encode($htmlfiles); ?>;
 		    var files = <?php echo json_encode($files); ?>;
-		    
-		    var b1 = settings.get("blocks")+"block1.json";
+		    var blockfiles = <?php echo json_encode($blocks); ?>;
+
+		    var b1 = settings.get("blocks")+blockfiles[0];
+		    console.log(b1);
 				$.getJSON(b1, function(data){
 					block = data;
 					block.name = "block1";

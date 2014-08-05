@@ -1,7 +1,10 @@
 {
-	"primary" : "experiments/stress_study/",
-	"image" : "images/",
-	"html" : "html/",
-	"blocks" : "blocks/",
-	"results" : "results/"
+  "primary" : "experiments/example/",
+  "image" : "stimuli/image/",                            
+  "audio" : "stimuli/audio/",
+  "video" : "stimuli/video/",
+  "text" : "stimuli/text/",
+  "html" : "html/",
+  "blocks" : "blocks/",
+  "results" : "results/"
 }
