@@ -1,15 +1,21 @@
-Before you continue, make sure you have a localhost set up on your machine
+Before you continue, make sure you have a localhost set up on your machine. 
 
 The master directory only contains "src" by default, which contains the web application library. For all intents and purposes I will refer to the master directory as "master".
 Overview:
-- "src/settings.json":        used to define desired folder structure for experiment
-- "src/functions/":           contains all functions used. User will probably only need to edit "experiment.js"
+- "src/functions/":           Contains all functions used. User will probably only need to edit "experiment.js"
+
+------------------------------------------------------------------------------------------
 
 You must provide the program your experimental folder structure in the "settings.json" file, stimuli within folders (mostly) of your choice defined in "settings.json", and the experimental block designs as JSON objects in your "blocks" directory, again, defined in "settings.json" 
 JSON objects are heavily employed in this application. JSON objects are data structure composed of "keys" and corresponding "values" -- this relationshp is similar to the key-value relationship of maps in C++ or field-value relationship of structs in MatLab. This Wikipedia article provides a good introduction to JSON objects: 
         http://en.wikipedia.org/wiki/JSON
 You can use, "http://jsonlint.com/" to check that your json object is properly written. 
 
+------------------------------------------------------------------------------------------
+
+An example experiment can be found inside "experiments/example/". It uses the settings found in the "settings.json" by default. 
+
+------------------------------------------------------------------------------------------
 Structuring your "settings.json":
   This file contains a JSON object. The default JSON object is:
   {
@@ -33,21 +39,26 @@ Structuring your "settings.json":
   You may add as many directories (each with a corresponding key) as you desire.
 
 
-Note: The dimensions of the experiment window are 800 x 600. Plan your experiment around that.
-Setting up an experimental block as a JSON object:
-This json object has 3 main keys (all of which are required): "instructions," "randomize," and "Trials". 
 
+------------------------------------------------------------------------------------------
+Setting up an experimental block as a JSON object:
+Note: The dimensions of the experiment window are 800 x 600. Plan your experiment around that.
+
+This json object has 3 main keys (all of which are required): "instructions," "randomize," and "Trials". 
 Block  - instructions:            Array of html files that will present the instructions for this block
       - randomize:                Boolean. True if you would like to randomize the trial presentation order
       - Trials:                   A 2-D array of the trials
-          - Trials[0]:            Trial 1 (each trials is 1-D arrays of subevents)
-            - Trials[0][0]:       subevent 1 (each subevent is a json object that produces some behavior from the experiment.)
-            - Trials[0][1]:       subevent 2
-            ...
-            - Trials[0][n]:       subevent n+1
-          - Trials[1]:            Trial 2
-          ...
-          - Trials[m]:            Trial m+1
+      [
+      	[                         Trial 1 (each trials is 1-D arrays of subevents)
+      		{},                     subevent 1 (each subevent is a json object that produces some behavior in the experiment)
+      		{},                     subevent 2
+      		..., 
+      		{}                      subevent n
+      	],
+      	[ {}, {}, ..., {} ],      Trial 2
+      	...
+      	[ {}, {}, ..., {} ]       Trial m
+      ]
 
 Each sub-event (with the exception of "clear") is capable of presenting an object (media or text) to the user
 For each sub-event, the following keys are required:
