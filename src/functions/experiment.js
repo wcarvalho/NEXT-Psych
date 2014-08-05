@@ -7,6 +7,7 @@ var ids = [];
 var events = [];
 var Data = {};
 var settings = {}
+var printer = false;
 
 function begin_block(S, block, D)
 {
@@ -229,11 +230,13 @@ function load_EvID()					// load most recent event and id
 //							move and display elements
 // =====================================================================================
 function print_attrs(id){
-	console.log(id);
-	var temp = document.getElementById(id);
-	console.log(temp);
-	console.log("x = " + temp.offsetLeft);
-	console.log("y = " + temp.offsetTop);
+	if (printer){
+		console.log(id);
+		var temp = document.getElementById(id);
+		console.log(temp);
+		console.log("x = " + temp.offsetLeft);
+		console.log("y = " + temp.offsetTop);
+	}
 
 }
 

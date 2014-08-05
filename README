@@ -1,12 +1,14 @@
+Before you continue, make sure you have a localhost set up on your machine
+
 The master directory only contains "src" by default, which contains the web application library. For all intents and purposes I will refer to the master directory as "master".
 Overview:
-- "src/settings.json":         used to define desired folder structure for experiment
+- "src/settings.json":        used to define desired folder structure for experiment
 - "src/functions/":           contains all functions used. User will probably only need to edit "experiment.js"
 
 You must provide the program your experimental folder structure in the "settings.json" file, stimuli within folders (mostly) of your choice defined in "settings.json", and the experimental block designs as JSON objects in your "blocks" directory, again, defined in "settings.json" 
 JSON objects are heavily employed in this application. JSON objects are data structure composed of "keys" and corresponding "values" -- this relationshp is similar to the key-value relationship of maps in C++ or field-value relationship of structs in MatLab. This Wikipedia article provides a good introduction to JSON objects: 
         http://en.wikipedia.org/wiki/JSON
-
+You can use, "http://jsonlint.com/" to check that your json object is properly written. 
 
 Structuring your "settings.json":
   This file contains a JSON object. The default JSON object is:

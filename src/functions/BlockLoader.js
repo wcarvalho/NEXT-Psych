@@ -6,21 +6,30 @@ function BlockLoader(block, settings){
 	this.fullfiles = [];
 	this.fileIndex = [];
 
-	this.LoadInstructions = function(){
-		for (var key in this.instructions){
-			var cur_ins = this.instructions[key];
-			var temp = Object();
-			temp.id = cur_ins;
-			temp.tag = "div";
-			this.Elements.add(temp, "data");
-			var page = this.settings.get("html")+cur_ins;
-			$.get(page, function(content){
-			  document.getElementById(cur_ins).innerHTML = content;
-			}).fail( function(){
-				alert(page + "didn't load!");
-			});
-		}
-	}
+	// this.LoadInstructions = function(list){
+	// 	if (typeof life !== "undefined")
+	// 		var instructions = list;
+	// 	else
+	// 		var instructions = this.instructions;
+	// 	for (var key in instructions){
+	// 		var cur_ins = this.instructions[key];
+	// 		var temp = Object();
+	// 		temp.id = cur_ins;
+	// 		temp.tag = "div";
+	// 		if (this.Elements.ids.indexOf(temp.id) === -1){
+	// 			this.Elements.add(temp, "data");
+	// 			var page = this.settings.get("html")+cur_ins;
+	// 			$.get(page, function(content){
+	// 			  document.getElementById(cur_ins).innerHTML = content;
+	// 			}).fail( function(){
+	// 				alert(page + "didn't load!");
+	// 			});
+	// 		}
+	// 		else{
+	// 			console.log(temp.id + " already exists... lol");
+	// 		}
+	// 	}
+	// }
 
 	this.loadFullFiles = function(filelist){
 		this.fullfiles = filelist;
@@ -86,6 +95,15 @@ function Elements(){
 	this.current = -1;
 	this.latest = -1;
 	this.ids = [];
+
+	var allTags = document.body.getElementsByTagName('*');
+	for (var tg = 0; tg< allTags.length; tg++) {
+    var tag = allTags[tg];
+    if (tag.id) {
+      this.ids.push(tag.id);
+		}   
+	}
+
 
 	this.setCurrent = function(which){
 		if (which ==! "undefined")

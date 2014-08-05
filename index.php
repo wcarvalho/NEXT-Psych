@@ -44,11 +44,16 @@
 	<!-- =============================== javascript =============================== -->
 		<script type="text/javascript">
 
-
+			var size = {
+				event: "browsersize",
+			  width: window.innerWidth || document.body.clientWidth,
+			  height: window.innerHeight || document.body.clientHeight
+			}
 			$(document).ready(function(){
+
 				D = new Data();
 				D.addEvent("Began Script");
-
+				D.addObject(size);
 				var settings = <?php echo json_encode($d); ?>;
 		    settings.get = function(what){
 		    	return this.primary + this[what];
@@ -61,14 +66,14 @@
 				$.getJSON(b1, function(data){
 					block = data;
 					block.name = "block1";
-				}).done(function(){
 					B = new BlockLoader(block, settings);
-					B.LoadInstructions();
 					B.loadElements(files);
 					D.addEvent("Loaded all Data");
+				}).done(function(){
 			    begin_instructions(htmlfiles, prefix);
-				}).fail(function() {
-					alert( "error loading " + b1);
+				}).fail(function(data) {
+					console.log( "error loading " + b1);
+					console.log(data);
 			  });
 
 				$('#next_btn').click(function(){
