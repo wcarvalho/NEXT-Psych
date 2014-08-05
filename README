@@ -64,17 +64,17 @@ For each sub-event, the following keys are required:
 
 Subevents and key requirements
   - Clear:                                  clears object(s) on screen
-    ○ "which":                                array with the ids of the objects you would like to remove from screen - [id1, id2, …, idn] or ["all"] for all.
+    ○ "which":                                  array with the ids of the objects you would like to remove from screen - [id1, id2, …, idn] or ["all"] for all.
   - Timed:                                  lasts a period of time
-    ○ "duration":                             length of time in milliseconds
+    ○ "duration":                               length of time in milliseconds
   - Key:                                    lasts until key press
-    ○ "press":                                which keys are acceptable (in an array) [key1, key2, …, keyn]
+    ○ "press":                                  which keys are acceptable (in an array) [key1, key2, …, keyn]
   - TimedKey:                               lasts period of time listening for a key press
-    ○ "duration":                             length of time in milliseconds
-    ○ "press":                                which keys are acceptable (in an array) [key1, key2, …, keyn]
-  - TImedOrKey:                             lasts a period of time or until key press
-    ○ "duration":                             length of time in milliseconds
-    ○ "press":                                which keys are acceptable (in an array) [key1, key2, …, keyn]
+    ○ "duration":                               length of time in milliseconds
+    ○ "press":                                  which keys are acceptable (in an array) [key1, key2, …, keyn]
+  - TimedOrKey:                             lasts a period of time or until key press
+    ○ "duration":                               length of time in milliseconds
+    ○ "press":                                  which keys are acceptable (in an array) [key1, key2, …, keyn]
   - Feedback:                               dependent on action of user in previous subevent, mimics defined subevent
-    ○ "mimics":                               which subevent you want to mimic (e.g. "Timed")
+    ○ "mimics":                                 which subevent you want to mimic (e.g. "Timed")
     ○ And requirements of the subevent it is mimicing    
