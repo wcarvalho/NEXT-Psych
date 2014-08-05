@@ -1,0 +1,84 @@
+{
+	"instructions" :
+		[
+			"main.html"
+		],
+	"randomize":
+	{
+			"yes" : false,
+			"which" : []
+	},
+	"Trials":[
+		[
+			{
+				"eventType":"Clear",
+				"which":["all"]
+			},
+			{
+				"eventType": "Timed",
+				"file":true,
+				"filename": "Animals_191_h_1600x1200.jpg",
+				"type":"media",
+				"tag":"img",
+				"x":-1,
+				"y":50,
+				"width": 400,
+				"duration": 5000
+			},
+			{
+				"eventType": "Key",
+				"file":false,
+				"type":"text",
+				"tag":"p",
+				"content":"This is a prompt after the question",
+				"id": "given1",
+				"x":-1,
+				"y":400,
+				"width": 300,
+				"press":[49, 81, 113]
+			},
+			{
+				"eventType": "Feedback",
+				"mimics": "Timed",
+				"dependence" : "press",
+				"file":false,
+				"type":"text",
+				"tag":"p",
+				"content":"you were wrong.",
+				"id": "feedback1",
+				"duration": 10000, 
+				"x":-1,
+				"y":500,
+				"width": 300,
+				"press" : [49]
+			}
+		],
+		[
+			{
+				"eventType":"Clear",
+				"which":["all"]
+			},
+			{
+				"eventType": "Timed",
+				"file":true,
+				"filename": "F01-Joy-Apex.jpg",
+				"type":"media",
+				"tag":"img",
+				"x":-1,
+				"y":50,
+				"width": 400,
+				"duration": 5000
+			},
+			{
+				"eventType": "Key",
+				"file":false,
+				"type":"text",
+				"tag":"p",
+				"content": "hey there, this is the second prompt",
+				"id": "given2",
+				"y":400,
+				"press":[49, 81, 113]
+			}
+		]
+	]
+}
