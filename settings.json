@@ -1,5 +1,5 @@
 {
-	"primary" : "experiments/first/",
+	"primary" : "experiments/example/",
 	"image" : "stimuli/image/",
 	"audio" : "stimuli/audio/",
 	"video" : "stimuli/video/",
