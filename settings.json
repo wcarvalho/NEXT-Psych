@@ -1,7 +1,7 @@
 {
-  "primary" : "experiments/example/",
-  "image" : "stimuli/image/",                            
-  "html" : "html/",
-  "blocks" : "blocks/",
-  "results" : "results/"
+	"primary" : "experiments/stress_study/",
+	"image" : "images/",
+	"html" : "html/",
+	"blocks" : "blocks/",
+	"results" : "results/"
 }
