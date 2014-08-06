@@ -28,10 +28,12 @@ This application has an example provided inside "experiments/example" with the s
      sub-event: "mimicks" sub-event type "Clear" with "press" [68, 100]. "which" is ["F01-Surprise.png", "F01-Neutral.jpg"]
      sub-event: "mimicks" sub-event type "Timed" with "press" [68, 100]. "Duration" is 2000
 
+
 ------------------------------------------------------------------------------------------
 The master directory only contains "src" by default, which contains the web application library. For all intents and purposes I will refer to the master directory as "master".
 Overview:
   - "src/functions/":           Contains all functions used. User will probably only need to edit "experiment.js"
+
 
 ------------------------------------------------------------------------------------------
 You must provide the program your experimental folder structure in the "settings.json" file, stimuli within folders (mostly) of your choice defined in "settings.json", and the experimental block designs as JSON objects in your "blocks" directory, again, defined in "settings.json" 
@@ -39,32 +41,25 @@ JSON objects are heavily employed in this application. JSON objects are data str
         http://en.wikipedia.org/wiki/JSON
 You can use, "http://jsonlint.com/" to check that your json object is properly written. 
 
-------------------------------------------------------------------------------------------
-An example experiment can be found inside "experiments/example/". It uses the settings found in the "settings.json" by default. 
 
 ------------------------------------------------------------------------------------------
-Structuring your "settings.json":
-  This file contains a JSON object. The default JSON object is:
+An example experiment can be found inside "experiments/example/". To run it please create a "settings.json" file with the following inside:
   {
     "primary" : "experiments/example/",
-    "image" : "stimuli/image/",                            
-    "audio" : "stimuli/audio/",
-    "video" : "stimuli/video/",
-    "text" : "stimuli/text/",
+    "image" : "stimuli/image/",
     "html" : "html/",
     "blocks" : "blocks/",
     "results" : "results/"
   }
 
-  For example, the "image" directory would be "master/experiments/first/stimuli/image/"  (please remember to place a backslash at the end of each directory).
-  You must provide the following keys:
+  For this example, the "image" directory would be "master/experiments/first/stimuli/image/"  (please remember to place a backslash at the end of each directory).
+	You must create your own "settings.json" for your experiment and store it in the master directory. You must provide the following keys:
   - "primary":            The main directory of your experiment -- all other directories are relative to this directory.
   - "html":               Where html files are stored.
   - "blocks":             Where experimental blocks are stored.
   - "results""            Where the results of the experimental blocks are stored.
   Note: Both "blocks," and "html" require an "order.txt" file which contains the order of the experimental blocks, and of the primary instructions, respectively. Instructions corresponding to the blocks are not required in this file; they should be defined in the JSON object of their corresponding experimental block.
   You may add as many directories (each with a corresponding key) as you desire.
-
 
 
 ------------------------------------------------------------------------------------------
