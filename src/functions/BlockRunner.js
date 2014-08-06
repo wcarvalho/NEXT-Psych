@@ -248,4 +248,37 @@ function Mover(id){
 		this.style.display = "none";
 	}
 
+	this.place = function (x, y, width){
+
+		if (( width === 'default') || (width === -1))
+			{
+				this.style.width = "300px";
+			}
+		else
+			this.style.width = width+"px";
+
+		if ((typeof x === 'undefined')||(x === -1))
+		{
+			this.style.left = "50%";
+			var xwidth = (this.style.width);
+			xwidth = xwidth.substring(0, xwidth.length - 2);
+			xwidth = parseFloat(xwidth);
+			this.style.marginLeft = -xwidth/2.0;
+		} 
+		else{
+			this.style.left = x+"px";
+		}
+		
+		if ((typeof y === 'undefined')||(y === -1))
+		{
+			this.style.top = "50%";
+			var ywidth = (this.style.width);
+			ywidth = ywidth.substring(0, ywidth.length - 2);
+			ywidth = parseFloat(ywidth);
+			this.style.marginTop = -ywidth/2.0;	} 
+		else{
+			this.style.top = y+"px";
+		}
+	}
+
 }

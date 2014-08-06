@@ -35,7 +35,7 @@
 		?>
 	<!-- =============================== html =============================== -->
 
-		<div id="data" style="position: absolute; display:none; left: ; top: 0">  </div>
+		<div id="data" style="position: absolute; display:none">  </div>
 		<div id="main_stage" style="">
 		</div>
 		<div>
@@ -65,7 +65,8 @@
 		    var htmlfiles = <?php echo json_encode($htmlfiles); ?>;
 		    var files = <?php echo json_encode($files); ?>;
 		    var blockfiles = <?php echo json_encode($blocks); ?>;
-
+		    console.log("htmlfiles = ");
+		    console.log(htmlfiles);
 		    var b1 = settings.get("blocks")+blockfiles[0];
 		    console.log(b1);
 				$.getJSON(b1, function(data){
@@ -87,7 +88,6 @@
 					if (htmlfiles.length === 0)
 						{ 
 							$("#main_stage").html("");
-							$('#next_btn').click(function(){
 								$("#next_btn").hide();
 								var main = document.getElementById('main_stage');
 								main.setAttribute("style","display:block;width:800px;height:600px");
@@ -96,7 +96,6 @@
 								main.style.left = "50%";
 								main.style.marginLeft = -(main.offsetWidth)/2.0+"px";
 								begin_block(settings, block, D);
-							});
 						}
 				});
 

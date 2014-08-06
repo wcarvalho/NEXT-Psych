@@ -1,11 +1,9 @@
 var tempsubID = getQueryVariable("MID");
-// console.log("tempsubID = " + tempsubID);
 
 function begin_instructions(instructions, prefix)
 {
 	hprefix = prefix + "html/";
 	main_content(hprefix, instructions.shift(), "subID", tempsubID.toString());
-	// $("#subID").val(tempsubID);
 	$(start).click(function(){
 		$(start).hide();
 		$(next_btn).show();
@@ -20,7 +18,6 @@ function main_content(prefix, file, also, that)
 		$("#main_stage").html(content);
 		if (typeof also !== "undefined"){
 			$("#"+also).val(that);
-			console.log(that);
 		}
 	});
 }

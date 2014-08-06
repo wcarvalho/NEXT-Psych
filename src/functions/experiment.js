@@ -8,6 +8,7 @@ var events = [];
 var Data = {};
 var settings = {}
 var printer = false;
+var lastkeypress;
 
 function begin_block(S, block, D)
 {
@@ -49,12 +50,7 @@ function nextEvent()
 	}
 }
 
-function loadEvent()
-{	
-	collect = {};
-	load_EvID();
-	// console.log("y = " + document.getElementById(id).style.marginTop);
-	var type = ev.eventType;
+	chooseEvent = function(type){
 	if (type === "Clear")
 		clearEvent();
 	if (type === "Timed")
@@ -67,7 +63,21 @@ function loadEvent()
 		timedkeyEvent();
 	if (type === "TimedOrKey")
 		timedorkeyEvent();
+	}
 
+
+function loadEvent()
+{	
+	collect = {};
+	load_EvID();
+	var type = ev.eventType;
+	if (type !== "Clear"){
+		$.getScript('src/functions/BlockRunner.js', function(){
+			M = new Mover(id);
+			M.place(ev.x, ev.y, ev.width);
+		});
+	}
+	chooseEvent(type);
 
 }
 
@@ -103,17 +113,12 @@ function timedEvent()
 
 function feedbackEvent()
 {
-	if ( ev.press.indexOf(Data.set[Data.set.length - 1].press) === -1 ){
-		var mimic = ev.mimics;
-		if (mimic === "Timed")
-			timedEvent();
-		if (mimic === "Key")
-			keydepEvent();
-		if (mimic === "TimedKey")
-			timedkeyEvent();	
-		if (type === "TimedOrKey")
-			timedorkeyEvent();
-
+	console.log("ev.press = ")
+	console.log(ev.press);
+	console.log("lastkey = " + lastkeypress);
+	if ( ev.press.indexOf(lastkeypress) === -1 ){
+		var mimic = ev.mimicks;
+		chooseEvent(mimic);
 	}
 	else
 		nextEvent();
@@ -134,6 +139,7 @@ function keydepEvent()
 			var press = event.keyCode;
 			if (keys.indexOf(press) !==-1)
 			{
+				lastkeypress = collect.press;
 				collect.press = press;
 				window.onkeypress = null;
 				Data.addObject(collect);
@@ -158,6 +164,7 @@ function timedkeyEvent()
 			collect.press = press;
 			if (keys.indexOf(press) !==-1)
 			{
+				lastkeypress = collect.press;
 				Data.addObject(collect);
 				++presses;
 				window.onkeypress = null;
@@ -189,6 +196,7 @@ function timedorkeyEvent()
 			collect.press = press;
 			if (keys.indexOf(press) !== -1)
 			{
+				lastkeypress = collect.press;
 				Data.addObject(collect);
 				++presses;
 				window.onkeypress = null;
@@ -206,7 +214,6 @@ function timedorkeyEvent()
 		}
 	}, time);
 }
-
 
 function finished()
 {

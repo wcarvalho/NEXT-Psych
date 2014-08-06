@@ -31,7 +31,7 @@ This application has an example provided inside "experiments/example" with the s
 ------------------------------------------------------------------------------------------
 The master directory only contains "src" by default, which contains the web application library. For all intents and purposes I will refer to the master directory as "master".
 Overview:
-- "src/functions/":           Contains all functions used. User will probably only need to edit "experiment.js"
+  - "src/functions/":           Contains all functions used. User will probably only need to edit "experiment.js"
 
 ------------------------------------------------------------------------------------------
 You must provide the program your experimental folder structure in the "settings.json" file, stimuli within folders (mostly) of your choice defined in "settings.json", and the experimental block designs as JSON objects in your "blocks" directory, again, defined in "settings.json" 

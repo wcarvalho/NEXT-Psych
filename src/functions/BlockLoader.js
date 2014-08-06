@@ -52,6 +52,7 @@ function BlockLoader(block, settings){
 					else
 						temp.id = current.id;
 
+					console.log("temp.id = " + temp.id);
 					if (this.Elements.ids.indexOf(temp.id) === -1){
 						if (current.type === "media")
 							this.addMediaProp(temp, current);
@@ -82,9 +83,9 @@ function BlockLoader(block, settings){
 	}
 
 	this.addTextProp = function(to, from){
-		if (from.file)
-			textFiletoDiv(from.filename, "."+to.id);
-		else
+		// if (from.file)
+		// 	textFiletoDiv(from.filename, "."+to.id);
+		// else
 			document.getElementById(to.id).innerHTML = from.content;
 	}
 }
