@@ -36,7 +36,7 @@ Overview:
 
 
 ------------------------------------------------------------------------------------------
-You must provide the program your experimental folder structure in the "settings.json" file, stimuli within folders (mostly) of your choice defined in "settings.json", and the experimental block designs as JSON objects in your "blocks" directory, again, defined in "settings.json" 
+You must provide the program with your experimental folder structure in a "settings.json" file that you place in the master directory, stimuli within folders (mostly) of your choice defined in "settings.json", and the experimental block designs as JSON objects in your "blocks" directory, again, defined in "settings.json" 
 JSON objects are heavily employed in this application. JSON objects are data structure composed of "keys" and corresponding "values" -- this relationshp is similar to the key-value relationship of maps in C++ or field-value relationship of structs in MatLab. This Wikipedia article provides a good introduction to JSON objects: 
         http://en.wikipedia.org/wiki/JSON
 You can use, "http://jsonlint.com/" to check that your json object is properly written. 
