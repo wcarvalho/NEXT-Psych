@@ -43,7 +43,7 @@ You can use, "http://jsonlint.com/" to check that your json object is properly w
 
 
 ------------------------------------------------------------------------------------------
-An example experiment can be found inside "experiments/example/". To run it please create a "settings.json" file with the following inside:
+An example experiment can be found inside "experiments/example/". To run it please create a "settings.json" file (again, in the master directory) with the following inside:
   {
     "primary" : "experiments/example/",
     "image" : "stimuli/image/",
