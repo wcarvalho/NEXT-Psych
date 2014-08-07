@@ -24,9 +24,9 @@ This application has an example provided inside "experiments/example" with the s
      sub-event: "Timed" with "duration" 0 presents the jpeg of the neutral expression
      sub-event: "TimedOrKey" with "duration" 6000 and "press" [65, 97, 68, 100, 70, 102, 83, 115] presents the jpeg with the options for the answer and sets the allowed key presses
   3. If the person chooses the correct answer, the options are cleared and the trial continues. If the person chooses the incorrect answer, the options are cleared and the correct answer is presented in place of the neutral expression.
-     sub-event: "mimicks" sub-event type "Clear" with "press" [65, 97, 70, 102, 83, 115]. "which" is ["F01-Surprise.png"]
-     sub-event: "mimicks" sub-event type "Clear" with "press" [68, 100]. "which" is ["F01-Surprise.png", "F01-Neutral.jpg"]
-     sub-event: "mimicks" sub-event type "Timed" with "press" [68, 100]. "Duration" is 2000
+     sub-event: "mimicks" sub-event type "Clear" with "press" [65, 97, 70, 102, 83, 115]. "which" is ["F01-Surprise.png"] (This clears just the options)
+     sub-event: "mimicks" sub-event type "Clear" with "press" [68, 100]. "which" is ["F01-Surprise.png", "F01-Neutral.jpg"] (This clears the options and the neutral expression)
+     sub-event: "mimicks" sub-event type "Timed" with "press" [68, 100]. "Duration" is 2000 (This presents the correct image)
 
 
 ------------------------------------------------------------------------------------------
