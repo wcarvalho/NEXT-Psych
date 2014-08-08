@@ -14,7 +14,7 @@
 	<!-- =============================== php =============================== -->
 		<?php
 			include 'src/functions/functions.php';
-			
+		
 			$d = jsonfile_array("settings.json");
 			$direcfull = $d["primary"];
 

@@ -60,7 +60,7 @@ function obj_to_file($file, $info){
 
 function arr_to_file($file, $array){
 
-	print( shell_exec ("pwd"));
+	print(  "pwd = " . shell_exec ("pwd"));
 	print( "file = " . $file);
 	file_put_contents($file, "");
 	$handle = fopen($file, 'w');

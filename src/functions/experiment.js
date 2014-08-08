@@ -20,7 +20,9 @@ function begin_block(S, block, D)
 		main_content(hprefix, block.instructions);
 		window.onkeypress = function(event)
 		{
-			if (event.keyCode === 32) loadTrial();
+			if (event.keyCode === 32){
+				loadTrial();
+			}
 		}
 	});
 }
@@ -51,6 +53,7 @@ function nextEvent()
 }
 
 	chooseEvent = function(type){
+		console.log(type);
 	if (type === "Clear")
 		clearEvent();
 	if (type === "Timed")
@@ -84,7 +87,8 @@ function loadEvent()
 function clearEvent()
 {
 	console.log("clearing!");
-	if (ev.which[0] === "all"){
+	console.log(ev.which);
+	if (ev.which === "all"){
 		while(ids.length !== 0){
 			hideindata(ids[0]);
 		}
@@ -182,12 +186,10 @@ function timedorkeyEvent()
 	collect.eventType = ev.eventType;
 	collect.id = id;
 	time = ev.duration;
-	console.log("supposed to wait: " + ev.duration);
 	showinmain(id);
 	var keys = ev.press;
 	executed = false;
 	presses = 0;
-	console.log("presses = " + presses);
 	window.onkeypress = function(event)
 	{
 		while (presses < 1)
@@ -201,7 +203,6 @@ function timedorkeyEvent()
 				++presses;
 				window.onkeypress = null;
 				window.clearTimeout(timeout);
-				console.log("exiting from keypress");
 				nextEvent();
 			}
 		}
@@ -209,7 +210,6 @@ function timedorkeyEvent()
 	var timeout = setTimeout( function(){
 		if(presses < 1){
 			Data.addObject(collect);
-			console.log("exiting from timeout");
 			nextEvent();		
 		}
 	}, time);
@@ -219,8 +219,8 @@ function finished()
 {
 	$.getScript('src/functions/blockWriter.js', function()
 	{
-		bw = new blockWriter("Block1", Data, settings);
-		bw.asJSON();
+		bw = new blockWriter("Block", Data, settings);
+		// bw.asJSON();
 		bw.asString();
 	}).done(function(){
 		alert("finished!");
