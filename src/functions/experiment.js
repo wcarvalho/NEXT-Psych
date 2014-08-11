@@ -9,6 +9,8 @@ var Data = {};
 var settings = {}
 var printer = false;
 var lastkeypress;
+var keyMap = {};
+var keys = [];
 
 function begin_block(S, block, D)
 {
@@ -21,6 +23,7 @@ function begin_block(S, block, D)
 		window.onkeypress = function(event)
 		{
 			if (event.keyCode === 32){
+				$("#main_stage").html("");
 				loadTrial();
 			}
 		}
@@ -34,7 +37,10 @@ function loadTrial()
 		++trials;
 		Data.addEvent("Loaded trial " + trials);
 		trial = Trials.shift();
-		nextEvent()
+		nextEvent();
+		lastkeypress = 0;
+		keyMap = {};
+		keys = [];
 	}
 	else
 		finished();
@@ -53,7 +59,7 @@ function nextEvent()
 }
 
 	chooseEvent = function(type){
-		console.log(type);
+		console.log("type = " + type);
 	if (type === "Clear")
 		clearEvent();
 	if (type === "Timed")
@@ -74,28 +80,63 @@ function loadEvent()
 	collect = {};
 	load_EvID();
 	var type = ev.eventType;
-	if (type !== "Clear"){
+	if (id !== ""){
+		console.log("id for mover = " + id)
 		$.getScript('src/functions/BlockRunner.js', function(){
 			M = new Mover(id);
 			M.place(ev.x, ev.y, ev.width);
 		});
 	}
+
+	if (ev.press !== "undefined"){
+		if (typeof ev.press === "number"){
+			temp = ev.press;
+			ev.press = [];
+			ev.press.push(temp);
+		}
+		for (var key in ev.press){
+			keyMap[ev.press[key]] = id;
+			keys.push(ev.press[key]);
+		}
+	}
+	console.log("keyMap = ");
+	console.log(keyMap);
 	chooseEvent(type);
 
 }
 
 function clearEvent()
 {
-	console.log("clearing!");
-	console.log(ev.which);
-	if (ev.which === "all"){
-		while(ids.length !== 0){
-			hideindata(ids[0]);
+	if (typeof ev.except === "undefined"){ ev.except = []; }
+	if (typeof ev.except === "string"){
+		var temp = ev.except;
+		ev.except = [];
+		ev.except.push(temp);
+	}
+	if (typeof ev.which === "string"){
+		var temp = ev.which;
+		ev.which = [];
+		ev.which.push(temp);
+	}
+
+	console.log("clearing " + ev.which);
+	console.log("except " + ev.except);
+	if (ev.which[0] === "all"){
+		var toClear = [];
+		for (var i = 0; i < ids.length; ++i){
+			toClear.push(ids[i]);
 		}
-		$("#main_stage").html("");
+		for (var i = 0; i < ev.except.length; ++i){
+			var dontClear = toClear.indexOf(ev.except[i]);
+			toClear.splice(dontClear, 1);
+		}
+		for(var i = 0; i < toClear.length; ++i){
+			hideindata(toClear[i]);
+		}
 	}
 	else{
 		for(var j = 0; j < ev.which.length; ++j){
+			console.log("hiding " + ev.which[j]);
 			hideindata(ev.which[j]);
 		}
 	}
@@ -105,10 +146,12 @@ function clearEvent()
 function timedEvent()
 {
 	collect.eventType = ev.eventType;
-	collect.id = id;
+	if (id !== ""){
+		collect.id = id;
+		showinmain(id);
+		print_attrs(id);
+	}
 	time = ev.duration;
-	showinmain(id);
-	print_attrs(id);
 	setTimeout( function(){
 		Data.addObject(collect);
 		nextEvent()
@@ -117,11 +160,30 @@ function timedEvent()
 
 function feedbackEvent()
 {
-	console.log("ev.press = ")
-	console.log(ev.press);
-	console.log("lastkey = " + lastkeypress);
-	if ( ev.press.indexOf(lastkeypress) === -1 ){
+	if (typeof ev.press === "undefined"){ ev.press = []; }
+	if ( ev.press.indexOf(lastkeypress) === -1 ){    // if last key press is NOT in press DO
 		var mimic = ev.mimicks;
+		console.log("mimic = " + mimic);
+		if (ev.correct === "chosen"){
+			id = keyMap[lastkeypress];
+		}
+		else{
+			id = ev.correct;
+		}
+		if (typeof ev.except === "string"){
+			var temp = ev.except;
+			ev.except = [];
+			ev.except.push(temp);
+		}
+		if (typeof ev.except === "undefined"){
+			ev.except = [];
+		}
+		if (typeof id !== "undefined"){
+			ev.except.push(id);
+		}
+		else{
+			id = "";
+		}
 		chooseEvent(mimic);
 	}
 	else
@@ -137,7 +199,6 @@ function keydepEvent()
 
 	collect.eventType = ev.eventType;
 	collect.id = id;
-	var keys = ev.press;
 	window.onkeypress = function(event)
 		{
 			var press = event.keyCode;
@@ -158,7 +219,6 @@ function timedkeyEvent()
 	collect.id = id;
 	time = ev.duration;
 	showinmain(id);
-	var keys = ev.press;
 	presses = 0;
 	window.onkeypress = function(event)
 	{
@@ -187,25 +247,22 @@ function timedorkeyEvent()
 	collect.id = id;
 	time = ev.duration;
 	showinmain(id);
-	var keys = ev.press;
 	executed = false;
 	presses = 0;
 	window.onkeypress = function(event)
 	{
-		while (presses < 1)
+		press = event.keyCode;
+		if (keys.indexOf(press) !== -1)
 		{
-			press = event.keyCode;
 			collect.press = press;
-			if (keys.indexOf(press) !== -1)
-			{
-				lastkeypress = collect.press;
-				Data.addObject(collect);
-				++presses;
-				window.onkeypress = null;
-				window.clearTimeout(timeout);
-				nextEvent();
-			}
+			lastkeypress = collect.press;
+			Data.addObject(collect);
+			++presses;
+			window.onkeypress = null;
+			window.clearTimeout(timeout);
+			nextEvent();
 		}
+
 	}
 	var timeout = setTimeout( function(){
 		if(presses < 1){
@@ -220,10 +277,9 @@ function finished()
 	$.getScript('src/functions/blockWriter.js', function()
 	{
 		bw = new blockWriter("Block", Data, settings);
-		// bw.asJSON();
+		bw.asJSON();
 		bw.asString();
 	}).done(function(){
-		alert("finished!");
 	});
 }
 
@@ -231,10 +287,14 @@ function load_EvID()					// load most recent event and id
 {
 	ev = trial.shift();
 	events.push(ev);
+	id = "";
 	if (typeof ev.id !== "undefined")
 		id = ev.id;
-	else
-		id = ev.filename;
+	else{
+		if (typeof ev.filename !== "undefined"){
+			id = ev.filename;
+		}
+	}
 }
 
 // =====================================================================================
@@ -242,22 +302,20 @@ function load_EvID()					// load most recent event and id
 // =====================================================================================
 function print_attrs(id){
 	if (printer){
-		console.log(id);
 		var temp = document.getElementById(id);
-		console.log(temp);
-		console.log("x = " + temp.offsetLeft);
-		console.log("y = " + temp.offsetTop);
 	}
 
 }
 
 function showinmain(what)
 {
-	if (ids.indexOf(what) === -1){
-		move_to("main_stage", what);
+	if (id !== ""){
+		if (ids.indexOf(what) === -1){
+			move_to("main_stage", what);
+		}
+		show(what);
+		ids.push(what);
 	}
-	show(what);
-	ids.push(what);
 }
 
 function hideindata(what)
@@ -272,6 +330,7 @@ function hideindata(what)
 
 function move_to(div, what)
 {
+	console.log("moving = " + what);
 	document.getElementById(div).appendChild( document.getElementById(what) );
 }
 

@@ -257,7 +257,7 @@ function Mover(id){
 		else
 			this.style.width = width+"px";
 
-		if ((typeof x === 'undefined')||(x === -1))
+		if ((x === -1))
 		{
 			this.style.left = "50%";
 			var xwidth = (this.style.width);
@@ -269,7 +269,7 @@ function Mover(id){
 			this.style.left = x+"px";
 		}
 		
-		if ((typeof y === 'undefined')||(y === -1))
+		if ((y === -1))
 		{
 			this.style.top = "50%";
 			var ywidth = (this.style.width);

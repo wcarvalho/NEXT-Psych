@@ -65,10 +65,11 @@
 		    var htmlfiles = <?php echo json_encode($htmlfiles); ?>;
 		    var files = <?php echo json_encode($files); ?>;
 		    var blockfiles = <?php echo json_encode($blocks); ?>;
+
 		    console.log("htmlfiles = ");
 		    console.log(htmlfiles);
 		    var b1 = settings.get("blocks")+blockfiles[0];
-		    console.log(b1);
+
 				$.getJSON(b1, function(data){
 					block = data;
 					block.name = "block1";
@@ -76,28 +77,48 @@
 					B.loadElements(files);
 					D.addEvent("Loaded all Data");
 				}).done(function(){
-			    begin_instructions(htmlfiles, prefix);
+			    show_instructions(htmlfiles, prefix);
 				}).fail(function(data) {
 					console.log( "error loading " + b1);
 					console.log(data);
 			  });
 
+
+
 				$('#next_btn').click(function(){
 					if (htmlfiles.length !== 0)
 						main_content(settings.get("html"), htmlfiles.shift());
-					if (htmlfiles.length === 0)
-						{ 
-							$("#main_stage").html("");
-								$("#next_btn").hide();
-								var main = document.getElementById('main_stage');
-								main.setAttribute("style","display:block;width:800px;height:600px");
-								main.style.border = "thick solid #000000"
-								main.style.position = "absolute";
-								main.style.left = "50%";
-								main.style.marginLeft = -(main.offsetWidth)/2.0+"px";
-								begin_block(settings, block, D);
-						}
+					else
+						experiment();
 				});
+
+				function show_instructions(instructions, prefix)
+				{
+					hprefix = prefix + "html/";
+					main_content(hprefix, instructions.shift(), "subID", tempsubID.toString());
+					$(start).click(function(){
+						$(start).hide();
+						if (instructions.length !== 0){
+							$(next_btn).show();
+							main_content(hprefix, instructions.shift());
+						}
+						else{
+							experiment();
+						}
+					});
+				}
+
+				function experiment(){
+					$("#main_stage").html("");
+					$("#next_btn").hide();
+					var main = document.getElementById('main_stage');
+					main.setAttribute("style","display:block;width:800px;height:600px");
+					main.style.border = "thick solid #000000"
+					main.style.position = "absolute";
+					main.style.left = "50%";
+					main.style.marginLeft = -(main.offsetWidth)/2.0+"px";
+					begin_block(settings, block, D);
+				}
 
 			});
 		</script>

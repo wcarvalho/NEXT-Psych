@@ -43,7 +43,9 @@ function BlockLoader(block, settings){
 		for (var tr = 0; tr < block.Trials.length; ++tr){
 			for (var ev = 0; ev < block.Trials[tr].length; ++ev){
 				var current = block.Trials[tr][ev];
+				console.log(current);
 				if (typeof current.tag !== 'undefined'){
+					// console.log(temp);
 					var temp = Object();
 					temp.tag = current.tag;
 

@@ -57,18 +57,18 @@
 				"press" : [68, 100],
 				"which" : ["F01-Surprise.png", "F01-Neutral.jpg"]
 			},
-			{
+				{
 				"eventType": "Feedback",
-				"mimicks" : "Timed",
-				"file":true,
-				"filename":"F01-Surprise-TurnAway_FRAME048.jpg",
-				"type":"media",
+				"mimicks": "Timed",
+				"press" : [68, 100],
+				"correct": "F01-Surprise-TurnAway_FRAME048.jpg",
 				"tag":"img",
+				"type":"media",
+				"filename": "F01-Surprise-TurnAway_FRAME048.jpg",
 				"x":450,
 				"y":50,
 				"width":300,
-				"press" : [68, 100],
-				"duration" : 2000
+				"duration": 3000
 			}
 		]
 	]
