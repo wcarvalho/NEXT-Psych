@@ -7,6 +7,7 @@
 		<script src="src/functions/BlockLoader.js" type="text/javascript"></script>
 		<script src="src/functions/Collector.js" type="text/javascript"></script>
 		<script src="src/functions/blockWriter.js" type="text/javascript"></script>		
+		<script src="src/functions/randomize_array.js" type="text/javascript"></script>		
 
   </head>
 	<body>
@@ -72,6 +73,9 @@
 
 				$.getJSON(b1, function(data){
 					block = data;
+					if ((block.randomize > 0)||(block.randomize === true)){
+						shuffle(block.Trials);
+					}
 					block.name = "block1";
 					B = new BlockLoader(block, settings);
 					B.loadElements(files);
