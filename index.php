@@ -117,6 +117,9 @@
 					main.style.position = "absolute";
 					main.style.left = "50%";
 					main.style.marginLeft = -(main.offsetWidth)/2.0+"px";
+					console.log(settings);
+					console.log(block);
+					console.log(D);
 					begin_block(settings, block, D);
 				}
 

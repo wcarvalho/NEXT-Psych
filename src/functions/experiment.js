@@ -30,6 +30,12 @@ function begin_block(S, block, D)
 	});
 }
 
+function resetTrialSettings(){
+	lastkeypress = 0;
+	keyMap = {};
+	keys = [];
+}
+
 function loadTrial()
 {
 	if(Trials.length !==0)
@@ -37,10 +43,8 @@ function loadTrial()
 		++trials;
 		Data.addEvent("Loaded trial " + trials);
 		trial = Trials.shift();
+		resetTrialSettings();
 		nextEvent();
-		lastkeypress = 0;
-		keyMap = {};
-		keys = [];
 	}
 	else
 		finished();
@@ -58,8 +62,7 @@ function nextEvent()
 	}
 }
 
-	chooseEvent = function(type){
-		console.log("type = " + type);
+chooseEvent = function(type){		
 	if (type === "Clear")
 		clearEvent();
 	if (type === "Timed")
@@ -72,21 +75,44 @@ function nextEvent()
 		timedkeyEvent();
 	if (type === "TimedOrKey")
 		timedorkeyEvent();
-	}
+}
 
+notUndefined = function(what, doThis){
+	if (typeof what !== "undefined")
+		doThis();
+}
+
+ifis = function(what, is, doThis){
+	if (typeof what === is){
+		doThis();
+	}
+}
+
+intoArray = function(something){
+	temp = something;
+	something = [];
+	something.push(temp);
+}
 
 function loadEvent()
-{	
+{
 	collect = {};
 	load_EvID();
 	var type = ev.eventType;
 	if (id !== ""){
-		console.log("id for mover = " + id)
 		$.getScript('src/functions/BlockRunner.js', function(){
 			M = new Mover(id);
 			M.place(ev.x, ev.y, ev.width);
 		});
 	}
+
+	// notUndefined(ev.press, function(){
+	// 	ifis(ev.press, "number", intoArray(ev.press));
+	// 	for (var key in ev.press){
+	// 		keyMap[ev.press[key]] = id;
+	// 		keys.push(ev.press[key]);
+	// 	}
+	// })
 
 	if (ev.press !== "undefined"){
 		if (typeof ev.press === "number"){
@@ -99,8 +125,6 @@ function loadEvent()
 			keys.push(ev.press[key]);
 		}
 	}
-	console.log("keyMap = ");
-	console.log(keyMap);
 	chooseEvent(type);
 
 }
@@ -274,6 +298,7 @@ function timedorkeyEvent()
 
 function finished()
 {
+	$("#main_stage").html("");
 	$.getScript('src/functions/blockWriter.js', function()
 	{
 		bw = new blockWriter("Block", Data, settings);
@@ -304,7 +329,6 @@ function print_attrs(id){
 	if (printer){
 		var temp = document.getElementById(id);
 	}
-
 }
 
 function showinmain(what)
