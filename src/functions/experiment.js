@@ -19,7 +19,6 @@ function begin_block(S, block, D)
 	Trials = block.Trials;
 	settings = S;
 	subID = block.ID;
-	console.log("subID = " + subID);
 	$.getScript('src/functions/init_instruct.js', function()
 	{
 		main_content(hprefix, block.instructions);
@@ -36,6 +35,7 @@ function begin_block(S, block, D)
 function resetTrialSettings(){
 	lastkeypress = 0;
 	keyMap = {};
+	keyMap.event = "keyMap";
 	keys = [];
 }
 
@@ -65,7 +65,8 @@ function nextEvent()
 	}
 }
 
-chooseEvent = function(type){		
+chooseEvent = function(type){	
+
 	if (type === "Clear")
 		clearEvent();
 	if (type === "Timed")
@@ -101,6 +102,10 @@ function loadEvent()
 {
 	collect = {};
 	load_EvID();
+	collect.subeventType = ev.eventType;
+	if ((typeof id !== "undefined")&&(id !== ""))
+		collect.id = id;
+		
 	var type = ev.eventType;
 	if (id !== ""){
 		$.getScript('src/functions/BlockRunner.js', function(){
@@ -128,6 +133,10 @@ function loadEvent()
 			keys.push(ev.press[key]);
 		}
 	}
+	console.log("collect");
+	console.log(collect);
+	console.log("keyMap = ");
+	console.log(keyMap);
 	chooseEvent(type);
 
 }
@@ -155,27 +164,31 @@ function clearEvent()
 			var dontClear = toClear.indexOf(ev.except[i]);
 			toClear.splice(dontClear, 1);
 		}
+		addClearer(toClear);
 		for(var i = 0; i < toClear.length; ++i){
 			hideindata(toClear[i]);
 		}
 	}
 	else{
+		addClearer(ev.which);
 		for(var j = 0; j < ev.which.length; ++j){
-			console.log("hiding " + ev.which[j]);
 			hideindata(ev.which[j]);
 		}
 	}
 	nextEvent();
 }
 
+function addClearer(toClear){
+	if (toClear.length !== 0){
+		collect.Cleared = toClear;
+		Data.addObject(collect);
+	}
+}
+
 function timedEvent()
 {
-	collect.eventType = ev.eventType;
-	if (id !== ""){
-		collect.id = id;
-		showinmain(id);
-		print_attrs(id);
-	}
+	showinmain(id);
+	print_attrs(id);
 	time = ev.duration;
 	setTimeout( function(){
 		Data.addObject(collect);
@@ -188,12 +201,12 @@ function feedbackEvent()
 	if (typeof ev.press === "undefined"){ ev.press = []; }
 	if ( ev.press.indexOf(lastkeypress) === -1 ){    // if last key press is NOT in press DO
 		var mimic = ev.mimicks;
-		console.log("mimic = " + mimic);
+		collect.Mimicks = mimic;
+		var chosen = keyMap[lastkeypress];
+		collect.Correct = ev.correct;
+		collect.Chosen = chosen;
 		if (ev.correct === "chosen"){
-			console.log("correct = chosen");
-			console.log("lastkeypress = " + lastkeypress);
-			id = keyMap[lastkeypress];
-			console.log("id = " + id);
+			id = chosen;
 		}
 		else{
 			id = ev.correct;
@@ -208,11 +221,11 @@ function feedbackEvent()
 		}
 		if (typeof id !== "undefined"){
 			ev.except.push(id);
+			collect.id = id;
 		}
 		else{
 			id = "";
 		}
-		console.log("except = "+ ev.except);
 		chooseEvent(mimic);
 	}
 	else
@@ -227,10 +240,9 @@ keyListener = function(doExtra){
 		{
 			collect.press = press;
 			lastkeypress = collect.press;
+			collectKeyMap();
 			Data.addObject(collect);
 			window.onkeypress = null;
-			console.log("keyListener");
-			console.log("doExtra = " + doExtra);
 			if (typeof doExtra !== "undefined"){
 				doExtra();
 			}
@@ -242,36 +254,15 @@ keyListener = function(doExtra){
 function keydepEvent()
 {
 	showinmain(id);
-
 	print_attrs(id);
-
-	collect.eventType = ev.eventType;
-	collect.id = id;
 	keyListener();
 }
 
 function timedkeyEvent()
 {
-	collect.eventType = ev.eventType;
-	collect.id = id;
 	time = ev.duration;
 	showinmain(id);
-	presses = 0;
-	window.onkeypress = function(event)
-	{
-		while (presses < 1)
-		{
-			press = event.keyCode;
-			collect.press = press;
-			if (keys.indexOf(press) !==-1)
-			{
-				lastkeypress = collect.press;
-				Data.addObject(collect);
-				++presses;
-				window.onkeypress = null;
-			}
-		}
-	}
+	keyListener();
 	setTimeout( function(){
 			Data.addObject(collect);
 			nextEvent();
@@ -280,12 +271,10 @@ function timedkeyEvent()
 
 function timedorkeyEvent()
 {
-	collect.eventType = ev.eventType;
-	collect.id = id;
 	time = ev.duration;
 	showinmain(id);
 	keyListener(function(){
-		window.clearTimeout(timeout)
+		window.clearTimeout(timeout);
 	});
 	var timeout = setTimeout( function(){
 		window.onkeypress = null;
@@ -319,6 +308,10 @@ function load_EvID()					// load most recent event and id
 			id = ev.filename;
 		}
 	}
+}
+
+function collectKeyMap(){
+	Data.addObject(keyMap);
 }
 
 // =====================================================================================

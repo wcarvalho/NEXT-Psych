@@ -28,6 +28,7 @@ function Data(){
 		this.lastCollection();
 	}
 	this.lastCollection = function(){
+		console.log("lastCollection");
 		console.log(this.collect);
 	}
 }
