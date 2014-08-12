@@ -73,14 +73,8 @@
 
 				$.getJSON(b1, function(data){
 					block = data;
-<<<<<<< HEAD
 					if ((block.randomize > 0)||(block.randomize === true))
 						shuffle(block.Trials);
-=======
-					if ((block.randomize > 0)||(block.randomize === true)){
-						shuffle(block.Trials);
-					}
->>>>>>> master
 					block.name = "block1";
 					B = new BlockLoader(block, settings);
 					B.loadElements(files);
