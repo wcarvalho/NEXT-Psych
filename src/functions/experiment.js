@@ -125,7 +125,6 @@ function loadEvent()
 			keys.push(ev.press[key]);
 		}
 	}
-	console.log(keyMap);
 	chooseEvent(type);
 
 }
@@ -144,8 +143,6 @@ function clearEvent()
 		ev.which.push(temp);
 	}
 
-	console.log("clearing " + ev.which);
-	console.log("except " + ev.except);
 	if (ev.which[0] === "all"){
 		var toClear = [];
 		for (var i = 0; i < ids.length; ++i){
@@ -229,8 +226,11 @@ keyListener = function(doExtra){
 			lastkeypress = collect.press;
 			Data.addObject(collect);
 			window.onkeypress = null;
-			if (typeof doExtra !== "undefined")
+			console.log("keyListener");
+			console.log("doExtra = " + doExtra);
+			if (typeof doExtra !== "undefined"){
 				doExtra();
+			}
 			nextEvent();
 		}
 	}
@@ -281,29 +281,13 @@ function timedorkeyEvent()
 	collect.id = id;
 	time = ev.duration;
 	showinmain(id);
-	executed = false;
-	presses = 0;
-	keyListener(window.clearTimeout(timeout))
-	// window.onkeypress = function(event)
-	// {
-	// 	press = event.keyCode;
-	// 	if (keys.indexOf(press) !== -1)
-	// 	{
-	// 		collect.press = press;
-	// 		lastkeypress = collect.press;
-	// 		Data.addObject(collect);
-	// 		++presses;
-	// 		window.onkeypress = null;
-	// 		window.clearTimeout(timeout);
-	// 		nextEvent();
-	// 	}
-
-	// }
+	keyListener(function(){
+		window.clearTimeout(timeout)
+	});
 	var timeout = setTimeout( function(){
-		if(presses < 1){
-			Data.addObject(collect);
-			nextEvent();		
-		}
+		window.onkeypress = null;
+		Data.addObject(collect);
+		nextEvent();
 	}, time);
 }
 
@@ -365,7 +349,6 @@ function hideindata(what)
 
 function move_to(div, what)
 {
-	console.log("moving = " + what);
 	document.getElementById(div).appendChild( document.getElementById(what) );
 }
 
