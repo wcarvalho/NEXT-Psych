@@ -11,12 +11,15 @@ var printer = false;
 var lastkeypress;
 var keyMap = {};
 var keys = [];
+var subID = "";
 
 function begin_block(S, block, D)
 {
 	Data = D;
 	Trials = block.Trials;
 	settings = S;
+	subID = block.ID;
+	console.log("subID = " + subID);
 	$.getScript('src/functions/init_instruct.js', function()
 	{
 		main_content(hprefix, block.instructions);
@@ -296,10 +299,11 @@ function finished()
 	$("#main_stage").html("");
 	$.getScript('src/functions/blockWriter.js', function()
 	{
-		bw = new blockWriter("Block", Data, settings);
+		bw = new blockWriter(subID, Data, settings);
 		bw.asJSON();
 		bw.asString();
 	}).done(function(){
+		alert("finished");
 	});
 }
 

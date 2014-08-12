@@ -1,5 +1,3 @@
-var tempsubID = getQueryVariable("MID");
-
 function main_content(prefix, file, also, that)
 {
 	page = prefix + file;

@@ -62,6 +62,7 @@
 		    settings.get = function(what){
 		    	return this.primary + this[what];
 		    }
+		    var tempsubID;
 				var prefix = <?php echo json_encode($direcfull); ?>;
 		    var htmlfiles = <?php echo json_encode($htmlfiles); ?>;
 		    var files = <?php echo json_encode($files); ?>;
@@ -98,8 +99,11 @@
 				function show_instructions(instructions, prefix)
 				{
 					hprefix = prefix + "html/";
+					tempsubID = getQueryVariable("MID");
 					main_content(hprefix, instructions.shift(), "subID", tempsubID.toString());
 					$(start).click(function(){
+						tempsubID = document.getElementById("subID").value;
+						block.ID = tempsubID;
 						$(start).hide();
 						if (instructions.length !== 0){
 							$(next_btn).show();
