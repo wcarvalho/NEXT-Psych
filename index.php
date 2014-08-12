@@ -68,8 +68,6 @@
 		    var files = <?php echo json_encode($files); ?>;
 		    var blockfiles = <?php echo json_encode($blocks); ?>;
 
-		    console.log("htmlfiles = ");
-		    console.log(htmlfiles);
 		    var b1 = settings.get("blocks")+blockfiles[0];
 
 				$.getJSON(b1, function(data){

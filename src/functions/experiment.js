@@ -3,6 +3,7 @@ var trial = [];
 var ev = {};
 var id = "";
 var trials = 0;
+var evnum = 0;
 var ids = [];
 var events = [];
 var Data = {};
@@ -37,6 +38,7 @@ function resetTrialSettings(){
 	keyMap = {};
 	keyMap.event = "keyMap";
 	keys = [];
+	evnum = 0;
 }
 
 function loadTrial()
@@ -57,6 +59,7 @@ function nextEvent()
 {
 	if(trial.length !==0)
 	{
+		++evnum;
 		loadEvent();
 	}
 	else
@@ -103,16 +106,19 @@ function loadEvent()
 	collect = {};
 	load_EvID();
 	collect.subeventType = ev.eventType;
+	var type = ev.eventType;
 	if ((typeof id !== "undefined")&&(id !== ""))
 		collect.id = id;
 		
-	var type = ev.eventType;
-	if (id !== ""){
-		$.getScript('src/functions/BlockRunner.js', function(){
+	$.getScript('src/functions/BlockRunner.js', function(){
+		console.log("type inside mover = " + type );
+		console.log("id.length = " + id.length);
+		console.log("event "+ evnum);
+		if ( (typeof id !== "undefined")&&(id.length !== 0) ){
 			M = new Mover(id);
 			M.place(ev.x, ev.y, ev.width);
-		});
-	}
+		}
+	});
 
 	// notUndefined(ev.press, function(){
 	// 	ifis(ev.press, "number", intoArray(ev.press));
@@ -133,10 +139,6 @@ function loadEvent()
 			keys.push(ev.press[key]);
 		}
 	}
-	console.log("collect");
-	console.log(collect);
-	console.log("keyMap = ");
-	console.log(keyMap);
 	chooseEvent(type);
 
 }
@@ -164,16 +166,16 @@ function clearEvent()
 			var dontClear = toClear.indexOf(ev.except[i]);
 			toClear.splice(dontClear, 1);
 		}
-		addClearer(toClear);
 		for(var i = 0; i < toClear.length; ++i){
 			hideindata(toClear[i]);
 		}
+		addClearer(toClear);
 	}
 	else{
-		addClearer(ev.which);
 		for(var j = 0; j < ev.which.length; ++j){
 			hideindata(ev.which[j]);
 		}
+		addClearer(ev.which);
 	}
 	nextEvent();
 }
@@ -190,9 +192,9 @@ function timedEvent()
 	showinmain(id);
 	print_attrs(id);
 	time = ev.duration;
+	Data.addObject(collect);
 	setTimeout( function(){
-		Data.addObject(collect);
-		nextEvent()
+		nextEvent();
 	}, time);
 }
 
@@ -263,8 +265,8 @@ function timedkeyEvent()
 	time = ev.duration;
 	showinmain(id);
 	keyListener();
+	Data.addObject(collect);
 	setTimeout( function(){
-			Data.addObject(collect);
 			nextEvent();
 	}, time);
 }
@@ -276,9 +278,9 @@ function timedorkeyEvent()
 	keyListener(function(){
 		window.clearTimeout(timeout);
 	});
+	Data.addObject(collect);
 	var timeout = setTimeout( function(){
 		window.onkeypress = null;
-		Data.addObject(collect);
 		nextEvent();
 	}, time);
 }
@@ -288,7 +290,8 @@ function finished()
 	$("#main_stage").html("");
 	$.getScript('src/functions/blockWriter.js', function()
 	{
-		bw = new blockWriter(subID, Data, settings);
+		var fname = subID+"_"+FullTimeAndDate();
+		bw = new blockWriter(fname, Data, settings);
 		bw.asJSON();
 		bw.asString();
 	}).done(function(){
@@ -314,6 +317,15 @@ function collectKeyMap(){
 	Data.addObject(keyMap);
 }
 
+function FullTimeAndDate(){
+	var D = new Date();
+	var DD = D.getDate();
+	var YYYY = D.getFullYear();
+	var MM = D.getMonth();
+	var hh = D.getHours();
+	var mm = D.getMinutes();
+	return YYYY+"_"+MM+"_"+DD+"_"+hh+"_"+mm;
+}
 // =====================================================================================
 //							move and display elements
 // =====================================================================================

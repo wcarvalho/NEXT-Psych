@@ -2,6 +2,7 @@ function Data(){
 	this.set = [];
 
 	this.begin = new Date();
+	console.log(this.begin);
 	this.startTime = this.begin.getTime();
 	this.currentTime = this.startTime;
 

@@ -1,7 +1,6 @@
 function main_content(prefix, file, also, that)
 {
 	page = prefix + file;
-	console.log("page = " + page);
 	$.get(page, function(content){
 		$("#main_stage").html(content);
 		if (typeof also !== "undefined"){
