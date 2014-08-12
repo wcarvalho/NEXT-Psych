@@ -125,6 +125,7 @@ function loadEvent()
 			keys.push(ev.press[key]);
 		}
 	}
+	console.log(keyMap);
 	chooseEvent(type);
 
 }
@@ -189,7 +190,10 @@ function feedbackEvent()
 		var mimic = ev.mimicks;
 		console.log("mimic = " + mimic);
 		if (ev.correct === "chosen"){
+			console.log("correct = chosen");
+			console.log("lastkeypress = " + lastkeypress);
 			id = keyMap[lastkeypress];
+			console.log("id = " + id);
 		}
 		else{
 			id = ev.correct;
@@ -208,11 +212,28 @@ function feedbackEvent()
 		else{
 			id = "";
 		}
+		console.log("except = "+ ev.except);
 		chooseEvent(mimic);
 	}
 	else
 		nextEvent();
 	
+}
+
+keyListener = function(doExtra){
+	window.onkeypress = function(event){
+		press = event.keyCode;
+		if (keys.indexOf(press) !== -1)
+		{
+			collect.press = press;
+			lastkeypress = collect.press;
+			Data.addObject(collect);
+			window.onkeypress = null;
+			if (typeof doExtra !== "undefined")
+				doExtra();
+			nextEvent();
+		}
+	}
 }
 
 function keydepEvent()
@@ -223,18 +244,7 @@ function keydepEvent()
 
 	collect.eventType = ev.eventType;
 	collect.id = id;
-	window.onkeypress = function(event)
-		{
-			var press = event.keyCode;
-			if (keys.indexOf(press) !==-1)
-			{
-				lastkeypress = collect.press;
-				collect.press = press;
-				window.onkeypress = null;
-				Data.addObject(collect);
-				nextEvent();
-			}
-		}
+	keyListener();
 }
 
 function timedkeyEvent()
@@ -273,21 +283,22 @@ function timedorkeyEvent()
 	showinmain(id);
 	executed = false;
 	presses = 0;
-	window.onkeypress = function(event)
-	{
-		press = event.keyCode;
-		if (keys.indexOf(press) !== -1)
-		{
-			collect.press = press;
-			lastkeypress = collect.press;
-			Data.addObject(collect);
-			++presses;
-			window.onkeypress = null;
-			window.clearTimeout(timeout);
-			nextEvent();
-		}
+	keyListener(window.clearTimeout(timeout))
+	// window.onkeypress = function(event)
+	// {
+	// 	press = event.keyCode;
+	// 	if (keys.indexOf(press) !== -1)
+	// 	{
+	// 		collect.press = press;
+	// 		lastkeypress = collect.press;
+	// 		Data.addObject(collect);
+	// 		++presses;
+	// 		window.onkeypress = null;
+	// 		window.clearTimeout(timeout);
+	// 		nextEvent();
+	// 	}
 
-	}
+	// }
 	var timeout = setTimeout( function(){
 		if(presses < 1){
 			Data.addObject(collect);
