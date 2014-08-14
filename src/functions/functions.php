@@ -47,23 +47,23 @@ function jsonfile_array($file)
 
 function spit($var)
 {
-	var_dump($var); echo("<br>");
+	echo("\nspit:\n"); var_dump($var); echo("\n");
+}
+
+function clearFile($file){
+	file_put_contents($file, "");	
 }
 
 function obj_to_file($file, $info){
 
-	file_put_contents($file, "");
-	$handle = fopen($file, 'w');
+	$handle = fopen($file, 'a');
 	fwrite($handle, $info);
 	fclose($handle);
 }
 
 function arr_to_file($file, $array){
 
-	print(  "pwd = " . shell_exec ("pwd"));
-	print( "file = " . $file);
-	file_put_contents($file, "");
-	$handle = fopen($file, 'w');
+	$handle = fopen($file, 'a');
 	// print($handle);
 
 	foreach ($array as $outterkey => $event) {

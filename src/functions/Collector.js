@@ -19,17 +19,16 @@ function Data(){
 		this.collect.event = event;
 		this.TimeSoFar();
 		this.set.push(this.collect);
-		this.lastCollection();
+		// this.lastCollection();
 	}
 
 	this.addObject = function(object){
 		this.collect = object;
 		this.TimeSoFar();
 		this.set.push(this.collect);
-		this.lastCollection();
+		// this.lastCollection();
 	}
 	this.lastCollection = function(){
-		console.log("lastCollection");
 		console.log(this.collect);
 	}
 }

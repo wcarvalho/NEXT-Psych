@@ -111,9 +111,6 @@ function loadEvent()
 		collect.id = id;
 		
 	$.getScript('src/functions/BlockRunner.js', function(){
-		console.log("type inside mover = " + type );
-		console.log("id.length = " + id.length);
-		console.log("event "+ evnum);
 		if ( (typeof id !== "undefined")&&(id.length !== 0) ){
 			M = new Mover(id);
 			M.place(ev.x, ev.y, ev.width);
@@ -287,15 +284,15 @@ function timedorkeyEvent()
 
 function finished()
 {
-	$("#main_stage").html("");
+	if (typeof block.post_experiment !== "undefined")
+		main_content(hprefix, block.post_experiment);
+	else	
+		$("#main_stage").html("");
 	$.getScript('src/functions/blockWriter.js', function()
 	{
 		var fname = subID+"_"+FullTimeAndDate();
-		bw = new blockWriter(fname, Data, settings);
-		bw.asJSON();
-		bw.asString();
+		bw = new blockWriter(fname, Data.set, settings);
 	}).done(function(){
-		alert("finished");
 	});
 }
 
