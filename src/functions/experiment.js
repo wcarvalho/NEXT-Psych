@@ -46,6 +46,7 @@ function loadTrial()
 	if(Trials.length !==0)
 	{
 		++trials;
+		console.log("Trial " + trials);
 		Data.addEvent("Loaded trial " + trials);
 		trial = Trials.shift();
 		resetTrialSettings();
