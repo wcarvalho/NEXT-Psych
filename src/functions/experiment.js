@@ -284,15 +284,16 @@ function timedorkeyEvent()
 
 function finished()
 {
-	if (typeof block.post_experiment !== "undefined")
-		main_content(hprefix, block.post_experiment);
-	else	
-		$("#main_stage").html("");
+	$("#main_stage").html("");
 	$.getScript('src/functions/blockWriter.js', function()
 	{
 		var fname = subID+"_"+FullTimeAndDate();
 		bw = new blockWriter(fname, Data.set, settings);
 	}).done(function(){
+		setTimeout( function(){
+			if (typeof block.post_experiment !== "undefined")
+				main_content(hprefix, block.post_experiment);
+		}, 3000);
 	});
 }
 
