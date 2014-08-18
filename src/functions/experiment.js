@@ -23,13 +23,12 @@ function begin_block(S, block, D)
 	$.getScript('src/functions/init_instruct.js', function()
 	{
 		main_content(hprefix, block.instructions);
-		window.onkeypress = function(event)
-		{
+		$(document).keyup(function(event){
 			if (event.keyCode === 32){
 				$("#main_stage").html("");
 				loadTrial();
 			}
-		}
+		});
 	});
 }
 
