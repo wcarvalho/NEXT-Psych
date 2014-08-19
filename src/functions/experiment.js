@@ -293,10 +293,12 @@ function finished()
 	}).done(function(){
 		setTimeout( function(){
 			if (typeof block.post_experiment !== "undefined"){
-				main_content(hprefix, block.post_experiment);
-				setTimeout( function(){
+				$.get(hprefix + block.post_experiment, function(content){
+					$("#main_stage").html(content)
+				}).
+				done(function(){
 					document.getElementById("swap").innerHTML = subID;
-				}, 250);
+				});
 			}
 		}, 3000);
 	});
