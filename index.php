@@ -104,8 +104,9 @@ session_start();
 					tempsubID = getQueryVariable("MID");
 					main_content(hprefix, instructions.shift(), "subID", tempsubID.toString());
 					$(start).click(function(){
-						tempsubID = document.getElementById("subID").value;
-						block.ID = tempsubID;
+						// tempsubID = document.getElementById("subID").value;
+						block.ID = randomnumber=Math.floor(Math.random()*999999);
+						console.log("block.ID = " + block.ID);
 						$(start).hide();
 						if (instructions.length !== 0){
 							$(next_btn).show();

@@ -292,8 +292,12 @@ function finished()
 		bw = new blockWriter(fname, Data.set, settings);
 	}).done(function(){
 		setTimeout( function(){
-			if (typeof block.post_experiment !== "undefined")
+			if (typeof block.post_experiment !== "undefined"){
 				main_content(hprefix, block.post_experiment);
+				setTimeout( function(){
+					document.getElementById("swap").innerHTML = subID;
+				}, 250);
+			}
 		}, 3000);
 	});
 }
