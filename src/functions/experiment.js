@@ -13,6 +13,70 @@ var lastkeypress;
 var keyMap = {};
 var keys = [];
 var subID = "";
+var collect = {};
+
+keyListener = function(acceptablekeys, doExtra, onKeyUp){
+	$(document).on('keydown.my', function(event){
+		var press = event.keyCode;
+		console.log("press = "+ press);
+		if (acceptablekeys.indexOf(press) !== -1){
+		console.log("inside press = "+ press);
+			collect.press = press;
+			console.log("collect.press = " + collect.press);
+			lastkeypress = collect.press;
+			collectKeyMap();
+			Data.addObject(collect);
+			if (typeof doExtra !== "undefined"){
+				doExtra();
+			}
+			$(document).off('keydown.my');
+		}
+	});
+	if (typeof onKeyUp !== "undefined"){
+		$(document).on('keyup.my', function(event){
+			var press = event.keyCode;
+			if (acceptablekeys.indexOf(press) !== -1){
+				onKeyUp();
+				nextEvent();
+				$(document).off('keyup.my');
+			}
+		});
+	}
+}
+
+// turnOffListener = function(){
+// 	$(document).off('keydown.my');
+// 	$(document).off('keyup.my');
+// }
+
+defaultKeyDown = function(press, doExtra){
+	collect.press = press;
+	lastkeypress = collect.press;
+	collectKeyMap();
+	Data.addObject(collect);
+	if (typeof doExtra !== "undefined"){
+		doExtra();
+	}
+	nextEvent();
+}
+
+// keyListener = function(doExtra){
+// 	window.onkeypress = function(event){
+// 		press = event.keyCode;
+// 		if (keys.indexOf(press) !== -1)
+// 		{
+// 			collect.press = press;
+// 			lastkeypress = collect.press;
+// 			collectKeyMap();
+// 			Data.addObject(collect);
+// 			window.onkeypress = null;
+// 			if (typeof doExtra !== "undefined"){
+// 				doExtra();
+// 			}
+// 			nextEvent();
+// 		}
+// 	}
+// }
 
 function begin_block(S, block, D)
 {
@@ -23,11 +87,9 @@ function begin_block(S, block, D)
 	$.getScript('src/functions/init_instruct.js', function()
 	{
 		main_content(hprefix, block.instructions);
-		$(document).keyup(function(event){
-			if (event.keyCode === 32){
-				$("#main_stage").html("");
-				loadTrial();
-			}
+		keyListener([32], function(){
+			$("#main_stage").html("");
+			loadTrial();
 		});
 	});
 }
@@ -69,7 +131,7 @@ function nextEvent()
 }
 
 chooseEvent = function(type){	
-
+	console.log(type);
 	if (type === "Clear")
 		clearEvent();
 	if (type === "Timed")
@@ -163,6 +225,8 @@ function clearEvent()
 			var dontClear = toClear.indexOf(ev.except[i]);
 			toClear.splice(dontClear, 1);
 		}
+		console.log("toClear:");
+		console.log(toClear);
 		for(var i = 0; i < toClear.length; ++i){
 			hideindata(toClear[i]);
 		}
@@ -201,7 +265,10 @@ function feedbackEvent()
 	if ( ev.press.indexOf(lastkeypress) === -1 ){    // if last key press is NOT in press DO
 		var mimic = ev.mimicks;
 		collect.Mimicks = mimic;
+		console.log("lastkeypress = " + lastkeypress);
 		var chosen = keyMap[lastkeypress];
+		console.log(keyMap);
+		console.log("chosen = "+ chosen);
 		collect.Correct = ev.correct;
 		collect.Chosen = chosen;
 		if (ev.correct === "chosen"){
@@ -232,36 +299,23 @@ function feedbackEvent()
 	
 }
 
-keyListener = function(doExtra){
-	window.onkeypress = function(event){
-		press = event.keyCode;
-		if (keys.indexOf(press) !== -1)
-		{
-			collect.press = press;
-			lastkeypress = collect.press;
-			collectKeyMap();
-			Data.addObject(collect);
-			window.onkeypress = null;
-			if (typeof doExtra !== "undefined"){
-				doExtra();
-			}
-			nextEvent();
-		}
-	}
-}
 
 function keydepEvent()
 {
 	showinmain(id);
 	print_attrs(id);
-	keyListener();
+	keyListener(keys, function(){
+		defaultKeyDown()
+	});
 }
 
 function timedkeyEvent()
 {
 	time = ev.duration;
 	showinmain(id);
-	keyListener();
+	keyListener(keys, function(){
+		defaultKeyDown()
+	});
 	Data.addObject(collect);
 	setTimeout( function(){
 			nextEvent();
