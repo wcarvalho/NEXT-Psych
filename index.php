@@ -44,7 +44,7 @@ session_start();
 		<div id="main_stage" style="">
 		</div>
 		<div>
-			<button id="start" value="start" >Press to Begin</button>
+			<center><button id="start" value="start" >Press to Begin</button></center>
 			<button id="next_btn" value="continue" style="display:none">Continue</button>
 			<input id="handler" type="hidden" onkeypress="myFunction()">
 		</div>

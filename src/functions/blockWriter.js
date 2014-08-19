@@ -65,22 +65,15 @@ function blockWriter(Filename, DataSet, settings, listname){
 		tempset = cloneArray(Set);
 		var counterMax = Math.ceil(tempset.length/tempSize); 
 		var List = listname;
-		console.log(List);
 		for (var i = 0; i < counterMax; ++i){
-			console.log("i = " + i);
-			console.log("counterMax = " + counterMax);
-			console.log("length of before getTemp array = " + tempset.length);
 			sendObject = {
 				'listname' : List,
 				'which' : i,
 				 'set' : getTempArray(tempset, tempSize),
 				 'max' : counterMax
 			}
-			console.log("length of after getTemp array = " + tempset.length);
 			$.post(ScriptFile("populateArray.php"), sendObject).done(function(data){
-				console.log(data);
 				if (data === "1"){
-					console.log("inside if");
 					txtObj = finalObject(List, counterMax, txtfile);
 					jsonObj = finalObject(List, counterMax, jsonfile);
 					$.post(ScriptFile(txtFileScript), txtObj).done(function(data){

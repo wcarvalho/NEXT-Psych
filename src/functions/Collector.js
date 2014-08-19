@@ -26,7 +26,7 @@ function Data(){
 		this.collect = object;
 		this.TimeSoFar();
 		this.set.push(this.collect);
-		this.lastCollection();
+		// this.lastCollection();
 	}
 	this.lastCollection = function(){
 		console.log(this.collect);
