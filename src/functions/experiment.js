@@ -2,11 +2,11 @@ var Trials = [];
 var trial = [];
 var ev = {};
 var id = "";
-var trials = 0;
-var evnum = 0;
+var trial_i = 0;
+var event_i = 0;
 var ids = [];
 var events = [];
-var Data = {};
+var data = {};
 var settings = {}
 var printer = false;
 var lastkeypress;
@@ -14,12 +14,13 @@ var keyMap = {};
 var keys = [];
 var subID = "";
 
+//____ NEW Globals
+var nTrials = 0;
+var nEvents = 0;
+//
 function begin_block(S, block, D)
 {
-	Data = D;
-	Trials = block.Trials;
-	settings = S;
-	subID = block.ID;
+	loadSettings(block, S, D);
 	$.getScript('src/functions/init_instruct.js', function()
 	{
 		main_content(hprefix, block.instructions);
@@ -33,38 +34,45 @@ function begin_block(S, block, D)
 	});
 }
 
+function loadSettings(Block, Settings, Data){
+	settings = Settings;
+	data = Data;
+	Trials = block.Trials;
+	nTrials = Trials.length;
+	subID = block.ID;
+}
+
 function resetTrialSettings(){
 	lastkeypress = 0;
 	keyMap = {};
 	keyMap.event = "keyMap";
 	keys = [];
-	evnum = 0;
+	event_i = 0;
+	nEvents = trial.length;
 }
+
 
 function loadTrial()
 {
-	if(Trials.length !==0)
-	{
-		++trials;
-		console.log("Trial " + trials);
-		Data.addEvent("Loaded trial " + trials);
-		trial = Trials.shift();
+	if (trial_i < nTrials){
+		trial = Trials[trial_i];
 		resetTrialSettings();
+		console.log("Trial " + trial_i);
+		data.addEvent("Loaded trial " + trial_i);
+		++trial_i;
 		nextEvent();
 	}
-	else
+	else{
 		finished();
+	}
 }
 
 function nextEvent()
 {
-	if(trial.length !==0)
-	{
-		++evnum;
+	if (event_i < nEvents){
 		loadEvent();
 	}
-	else
-	{
+	else{
 		loadTrial();
 	}
 }
@@ -85,26 +93,11 @@ chooseEvent = function(type){
 		timedorkeyEvent();
 }
 
-notUndefined = function(what, doThis){
-	if (typeof what !== "undefined")
-		doThis();
-}
-
-ifis = function(what, is, doThis){
-	if (typeof what === is){
-		doThis();
-	}
-}
-
-intoArray = function(something){
-	temp = something;
-	something = [];
-	something.push(temp);
-}
-
 function loadEvent()
 {
 	collect = {};
+	ev = trial[event_i];
+	++event_i;
 	load_EvID();
 	collect.subeventType = ev.eventType;
 	var type = ev.eventType;
@@ -118,13 +111,6 @@ function loadEvent()
 		}
 	});
 
-	// notUndefined(ev.press, function(){
-	// 	ifis(ev.press, "number", intoArray(ev.press));
-	// 	for (var key in ev.press){
-	// 		keyMap[ev.press[key]] = id;
-	// 		keys.push(ev.press[key]);
-	// 	}
-	// })
 
 	if (ev.press !== "undefined"){
 		if (typeof ev.press === "number"){
@@ -181,7 +167,7 @@ function clearEvent()
 function addClearer(toClear){
 	if (toClear.length !== 0){
 		collect.Cleared = toClear;
-		Data.addObject(collect);
+		data.addObject(collect);
 	}
 }
 
@@ -190,7 +176,7 @@ function timedEvent()
 	showinmain(id);
 	print_attrs(id);
 	time = ev.duration;
-	Data.addObject(collect);
+	data.addObject(collect);
 	setTimeout( function(){
 		nextEvent();
 	}, time);
@@ -241,7 +227,7 @@ keyListener = function(doExtra){
 			collect.press = press;
 			lastkeypress = collect.press;
 			collectKeyMap();
-			Data.addObject(collect);
+			data.addObject(collect);
 			window.onkeypress = null;
 			if (typeof doExtra !== "undefined"){
 				doExtra();
@@ -263,7 +249,7 @@ function timedkeyEvent()
 	time = ev.duration;
 	showinmain(id);
 	keyListener();
-	Data.addObject(collect);
+	data.addObject(collect);
 	setTimeout( function(){
 			nextEvent();
 	}, time);
@@ -276,7 +262,7 @@ function timedorkeyEvent()
 	keyListener(function(){
 		window.clearTimeout(timeout);
 	});
-	Data.addObject(collect);
+	data.addObject(collect);
 	var timeout = setTimeout( function(){
 		window.onkeypress = null;
 		nextEvent();
@@ -289,7 +275,7 @@ function finished()
 	$.getScript('src/functions/blockWriter.js', function()
 	{
 		var fname = subID+"_"+FullTimeAndDate();
-		bw = new blockWriter(fname, Data.set, settings);
+		bw = new blockWriter(fname, data.set, settings);
 	}).done(function(){
 		setTimeout( function(){
 			if (typeof block.post_experiment !== "undefined"){
@@ -300,14 +286,12 @@ function finished()
 					document.getElementById("swap").innerHTML = subID;
 				});
 			}
-		}, 3000);
+		}, 10*nTrials);
 	});
 }
 
 function load_EvID()					// load most recent event and id
 {
-	ev = trial.shift();
-	events.push(ev);
 	id = "";
 	if (typeof ev.id !== "undefined")
 		id = ev.id;
@@ -319,7 +303,7 @@ function load_EvID()					// load most recent event and id
 }
 
 function collectKeyMap(){
-	Data.addObject(keyMap);
+	data.addObject(keyMap);
 }
 
 function FullTimeAndDate(){

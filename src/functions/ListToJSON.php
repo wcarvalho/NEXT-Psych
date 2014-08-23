@@ -1,6 +1,8 @@
 <?php session_start();
 
 	include 'functions.php';
+	include 'FileHandlers.php';
+
 	$listname = $_POST['listname'];
 	$end = $_POST['max'];
 	$file = $_POST['file'];

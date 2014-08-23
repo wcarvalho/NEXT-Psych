@@ -2,6 +2,7 @@
 session_start();
 ?>
 <html>
+	<!-- header with libraries/files that are loaded -->
 	<head>
 		<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
 		<script src="src/functions/init_instruct.js" type="text/javascript"></script>
@@ -17,57 +18,53 @@ session_start();
 
 	<!-- =============================== php =============================== -->
 		<?php
-			include 'src/functions/functions.php';
-			$GLOBALS['list'] = array();
+			include 'src/functions/include.php';
 
-			$d = jsonfile_array("settings.json");
-			$direcfull = $d["primary"];
+			$d = jsonToArray("settings.json");
+			$prime_dir = $d["primary"];
 
 			$htmlfiles = array();
-			ListtoArray($direcfull . $d["html"] ."order.txt", $htmlfiles);				// html files loaded
+			PushFileToArray($prime_dir . $d["html"] ."order.txt", $htmlfiles);				// html files loaded
 
 			$blocks = array();
-			ListtoArray($direcfull . $d["blocks"] . "order.txt", $blocks);				// blocks loaded
+			PushFileToArray($prime_dir . $d["blocks"] . "order.txt", $blocks);				// blocks loaded
 			
 			$files = array(array()); 
-			load_direc($direcfull.$d["image"], $files);
-			load_direc($direcfull.$d["audio"], $files);
-			load_direc($direcfull.$d["video"], $files);
-			load_direc($direcfull.$d["text"], $files);
-			load_direc($direcfull.$d["html"], $files);
+			PushDirToArray($prime_dir.$d["image"], $files);
+			PushDirToArray($prime_dir.$d["audio"], $files);
+			PushDirToArray($prime_dir.$d["video"], $files);
+			PushDirToArray($prime_dir.$d["text"], $files);
+			PushDirToArray($prime_dir.$d["html"], $files);
 
-			array_shift($files);
+			array_shift($files); // clears the first element of files (which is empty)
 		?>
 	<!-- =============================== html =============================== -->
 
-		<div id="data" style="position: absolute; display:none">  </div>
-		<div id="main_stage" style="">
-		</div>
+		<!-- hidden div that stores all of the objects that are to be presented -->
+		<div id="data" style="position: absolute; display:none"> </div> 
+		<!-- div that displays screen events to the user -->
+		<div id="main_stage" style=""> </div>
+		<!-- div below the main display that holds buttons for progression through the instructional screens -->
 		<div>
 			<center><button id="start" value="start" >Press to Begin</button></center>
 			<button id="next_btn" value="continue" style="display:none">Continue</button>
-			<input id="handler" type="hidden" onkeypress="myFunction()">
 		</div>
 
-	<!-- =============================== javascript =============================== -->
+	<!-- ============================ javascript =============================== -->
 		<script type="text/javascript">
 
-			var size = {
-				event: "browsersize",
-			  width: window.innerWidth || document.body.clientWidth,
-			  height: window.innerHeight || document.body.clientHeight
-			}
 			$(document).ready(function(){
 
 				D = new Data();
 				D.addEvent("Began Script");
-				D.addObject(size);
+				D.addObject(getScreenDimensions());
+				console.log(D);
 				var settings = <?php echo json_encode($d); ?>;
 		    settings.get = function(what){
 		    	return this.primary + this[what];
 		    }
 		    var tempsubID;
-				var prefix = <?php echo json_encode($direcfull); ?>;
+				var prefix = <?php echo json_encode($prime_dir); ?>;
 		    var htmlfiles = <?php echo json_encode($htmlfiles); ?>;
 		    var files = <?php echo json_encode($files); ?>;
 		    var blockfiles = <?php echo json_encode($blocks); ?>;
@@ -132,8 +129,17 @@ session_start();
 
 			});
 		</script>
+		<script type="text/javascript">
+			getScreenDimensions = function(){
+				var size = {
+					event: "browsersize",
+				  width: window.innerWidth || document.body.clientWidth,
+				  height: window.innerHeight || document.body.clientHeight
+				}
+				return size;
+			}
+		</script>
 
-	<!-- =============================== javascript =============================== -->
 	</body>
 
 </html>
