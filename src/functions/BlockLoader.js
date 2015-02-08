@@ -115,7 +115,7 @@ function Elements(){
 	this.add = function(e, where){
 		this.raw.push(e);
 		this.ids.push(e.id);
-		var x = document.createElement(e.tag);
+		var x = document.(createElement)(e.tag);
 		x.id = e.id;
 		if (typeof e.src !== "undefined")
 			x.src = e.src;

@@ -6,11 +6,11 @@ session_start();
 		<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
 		<script src="src/functions/init_instruct.js" type="text/javascript"></script>
 		<script src="src/functions/experiment.js" type="text/javascript"></script>
-		<script src="src/functions/load.js" type="text/javascript"></script>
+		<script src=p"src/functions/load.js" type="text/javascript"></script>
 		<script src="src/functions/BlockLoader.js" type="text/javascript"></script>
 		<script src="src/functions/Collector.js" type="text/javascript"></script>
-		<script src="src/functions/blockWriter.js" type="text/javascript"></script>		
-		<script src="src/functions/randomize_array.js" type="text/javascript"></script>		
+		<script src="src/functions/blockWriter.js" type="text/javascript"></script>
+		<script src="src/functions/randomize_array.js" type="text/javascript"></script>
 
   </head>
 	<body>
@@ -28,8 +28,8 @@ session_start();
 
 			$blocks = array();
 			ListtoArray($direcfull . $d["blocks"] . "order.txt", $blocks);				// blocks loaded
-			
-			$files = array(array()); 
+
+			$files = array(array());
 			load_direc($direcfull.$d["image"], $files);
 			load_direc($direcfull.$d["audio"], $files);
 			load_direc($direcfull.$d["video"], $files);
